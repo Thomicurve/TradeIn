@@ -16,7 +16,7 @@ Nos permite el desarrollo de aplicaciones híbridas. Y de esta manera con un sol
 
 Crea y/o ingresa a tu carpeta inicial del desarrollo. Descarga el template con el comando:
 
-    git clone https://github.com/JorgePHI/f7-v606
+    git clone https://github.com/JorgePHI/f7-v702
 
-Ingresando luego en la carpeta f7-v606 podrá usar el template de Framework 7, Version 6.0.6
+Ingresando luego en la carpeta f7-v702 podrá usar el template de Framework 7, Version 7.0.2
 
