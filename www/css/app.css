@@ -764,3 +764,13 @@ code {
 .pie-chart svg {
   max-width: 320px;
 }
+
+.tabbar-label {
+  text-transform: none;
+  font-size: 12px;
+  padding-top: 3px;
+}
+
+.f7-icons .icon {
+  padding-top: 2px;
+}

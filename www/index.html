@@ -1,107 +1,84 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <!--
-        Customize this policy to fit your own app's needs. For more guidance, see:
-            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
-        Some notes:
-            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
-            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-                * Enable inline JS: add 'unsafe-inline' to default-src
-        
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
--->
-    <!-- Required meta tags-->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="msapplication-tap-highlight" content="no">
-    <!-- Color theme for statusbar -->
-    <!-- <meta name="theme-color" content="#2196f3"> -->
-    <meta name="color-scheme" content="light dark">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1,
+            maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui,
+            viewport-fit=cover">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="color-scheme" content="light dark">
 
-    <!-- Your app title -->
-    <title>My App</title>
-    <!-- Path to Framework7 Library CSS -->
-    <link rel="stylesheet" href="lib/framework7/framework7-bundle.css">
-    <!-- Path to icons -->
-    <link rel="stylesheet" href="css/icons.css">
-    <!-- Path to your custom app styles-->
-    <link rel="stylesheet" href="css/app.css">
-</head>
+        <!-- Your app title -->
+        <title>TradeIn</title>
+        <!-- Path to Framework7 Library CSS -->
+        <link rel="stylesheet" href="lib/framework7/framework7-bundle.css">
+        <!-- Path to icons -->
+        <link rel="stylesheet" href="css/icons.css">
+        <!-- Path to your custom app styles-->
+        <link rel="stylesheet" href="css/app.css">
+    </head>
 
-<body>
-    <div id="app">
-        <!-- Statusbar overlay -->
-        <div class="statusbar"></div>
-    
-        <!-- Your main view, should have "view-main" class -->
-        <div class="view view-main">
-       
-            <!-- Top Navbar -->
-            <div class="navbar">
-                <div class="navbar-bg"></div>
-                <div class="navbar-inner">
-                    <div class="left"><i class="icon icon-back"></i></div>
-                    <div class="title">Page Title</div>
-                    <div class="right"><i class="icon icon-forward"></i></div>
+    <body>
+        <div id="app">
+            <div class="statusbar"></div>
+            <div class="views tabs safe-areas">
+
+                <div class="toolbar tabbar toolbar-bottom">
+                    <div class="toolbar-inner">
+                        <a href="#home" class="tab-link tab-link-active">
+                            <i class="f7-icons icon">house</i>
+                            <span class="tabbar-label md-only">Inicio</span>
+                        </a>
+                        <a href="#actives" class="tab-link">
+                            <i class="f7-icons icon">graph_square</i>
+                            <span class="tabbar-label md-only">Mis activos</span>
+                        </a>
+                        <a href="#account" class="tab-link">
+                            <i class="f7-icons icon">person</i>
+                            <span class="tabbar-label">Cuenta</span>
+                        </a>
+                    </div>
                 </div>
-            </div>
-    
-            <!-- Toolbar -->
-            <div class="toolbar toolbar-bottom">
-                <div class="toolbar-inner">
-                <!-- Toolbar links -->
-                <a href="#" class="link">Link 1</a>
-                <a href="#" class="link">Link 2</a>
-                </div>
-            </div>
-        
-        <!-- Initial Page, "data-name" contains page name -->
-            <div data-name="index" class="page">
-                <!-- Scrollable page content -->
-                <div class="page-content">
-                    <div class="block">
-                        <p>Page content goes here</p>
-                        <!-- Link to another page -->
-                        <a href="/about/">About app</a>
 
-                        <!-- In data-popup attribute we specify CSS selector of popup we need to open -->
-                        <p><a href="#" data-popup=".my-popup" class="popup-open">Open Popup</a></p>
-
-                        <!-- And somewhere in DOM -->
-                        <div class="popup my-popup">
-                            <div class="view">
-                                <div class="page">
-                                    <div class="navbar">
-                                        <div class="navbar-bg"></div>
-                                        <div class="navbar-inner">
-                                            <div class="title">Popup</div>
-                                            <div class="right">
-                                                <!-- Link to close popup -->
-                                                <a class="link popup-close">Close</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="page-content">
-                                      ...
-                                    </div>
-                                </div>
+                <div class="view view-main tab-active view-init tab" id="home" data-url="/">
+                    <div class="page page-current">
+                        <div class="navbar">
+                            <div class="navbar-bg"></div>
+                            <div class="navbar-inner">
+                                <div class="title">TradeIn</div>
                             </div>
+                        </div>
+                        <div class="page-content">
+                            <div class="page-title">Inicio</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="view view-init tab" id="actives" data-url="/activos/">
+                    <div class="page page-current">
+                        <div class="page-content">
+                            <div class="page-title">Activos</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="view view-init tab" id="account"
+                    data-url="/cuenta/">
+                    <div class="page page-current">
+                        <div class="page-content">
+                            <div class="page-title">Mi cuenta</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
 
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="lib/framework7/framework7-bundle.min.js"></script>
-    <!--<script type="text/javascript" src="lib/framework7/framework7.js"></script>-->
-    <script type="text/javascript" src="js/my-app.js"></script>
-</body>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript"
+            src="lib/framework7/framework7-bundle.min.js"></script>
+        <!--<script type="text/javascript" src="lib/framework7/framework7.js"></script>-->
+        <script type="text/javascript" src="js/my-app.js"></script>
+    </body>
 
 </html>
