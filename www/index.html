@@ -25,13 +25,13 @@
             <div class="statusbar"></div>
             <div class="views tabs safe-areas">
 
-                <div class="toolbar tabbar toolbar-bottom">
+                <!-- <div class="toolbar tabbar toolbar-bottom">
                     <div class="toolbar-inner">
-                        <a href="#home" class="tab-link tab-link-active">
+                        <a href="/" class="tab-link tab-link-active">
                             <i class="f7-icons icon">house</i>
                             <span class="tabbar-label md-only">Inicio</span>
                         </a>
-                        <a href="#actives" class="tab-link">
+                        <a href="/activos/" class="tab-link">
                             <i class="f7-icons icon">graph_square</i>
                             <span class="tabbar-label md-only">Mis activos</span>
                         </a>
@@ -40,11 +40,46 @@
                             <span class="tabbar-label">Cuenta</span>
                         </a>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="view view-main tab-active view-init tab" id="home" data-url="/">
                     <div class="page page-current">
-                        <div class="navbar">
+                        <div class="text-align-center">
+                            <h1>TradeIn</h1>
+                            <h3>Login</h5>
+                        </div>
+                        <form class="list" id="my-form">
+                            <ul>
+                              <li>
+                                <div class="item-content item-input">
+                                  <div class="item-inner">
+                                    <div class="item-title item-label">Correo electrónico</div>
+                                    <div class="item-input-wrap">
+                                      <input type="email" name="email" placeholder="Correo electrónico" />
+                                    </div>
+                                  </div>
+                                </div>
+                              </li>
+                              <li>
+                                <div class="item-content item-input">
+                                  <div class="item-inner">
+                                    <div class="item-title item-label">Contraseña</div>
+                                    <div class="item-input-wrap">
+                                      <input type="password" name="password" placeholder="Contraseña" />
+                                    </div>
+                                  </div>
+                                </div>
+                              </li>
+                            </ul>
+                          </form>
+                          <div class="block row">
+                            <div class="col"><a class="button button-fill convert-form-to-data" href="#">Loguearse</a></div>
+                            <div class="col"><a class="button button-fill fill-form-from-data" href="/registro/">Registrarse</a></div>
+                          </div>
+                          <div class="row block">
+                            <div class="col"><a class="button button-fill fill-form-from-data" href="#">Entrar con Google</a></div>
+                          </div>
+                        <!-- <div class="navbar">
                             <div class="navbar-bg"></div>
                             <div class="navbar-inner">
                                 <div class="title">TradeIn</div>
@@ -52,22 +87,7 @@
                         </div>
                         <div class="page-content">
                             <div class="page-title">Inicio</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="view view-init tab" id="actives" data-url="/activos/">
-                    <div class="page page-current">
-                        <div class="page-content">
-                            <div class="page-title">Activos</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="view view-init tab" id="account"
-                    data-url="/cuenta/">
-                    <div class="page page-current">
-                        <div class="page-content">
-                            <div class="page-title">Mi cuenta</div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

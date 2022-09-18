@@ -1,6 +1,5 @@
 // If we need to use custom DOM library, let's save it to $$ variable:
 var $$ = Dom7;
-
 var app = new Framework7({
   // App root element
   root: '#app',
@@ -15,16 +14,32 @@ var app = new Framework7({
   // Add default routes
   routes: [
     {
-      path: '/cuenta/'
+      path: '/cuenta/',
+      name: 'cuenta',
+      url: './pages/account.html'
     },
     {
       path: '/activos/',
+      name: 'activos',
+      url: './pages/actives.html'
+    },
+    {
+      path: '/registro/',
+      name: 'registro',
+      url: './pages/register.html'
     },
     {
       path: '/',
+      url: './index.html',
+      name: 'inicio',
+      options: {
+        props: {
+          userToken: ""
+        }
+      }
     }
   ]
-  // ... other parameters
+
 });
 
 var mainView = app.views.create('.view-main');
@@ -34,8 +49,15 @@ $$(document).on('deviceready', function () {
   console.log("Device is ready!");
 });
 
-// Option 1. Using one 'page:init' handler for all pages
-$$(document).on('page:init', function (e) {
-  // Do something here when page loaded and initialized
-  console.log(e);
-})
+
+app.on('pageInit', function (page) {
+  $$('.register-button').on('click', () => {
+    console.log($$('#email').val());
+  })
+
+
+  if (page.route.name == 'inicio')
+    if (page.route.route.options.props.userToken != '')
+      mainView.router.navigate({ name: 'activos' })
+    else mainView.router.navigate({ name: 'inicio' })
+});
