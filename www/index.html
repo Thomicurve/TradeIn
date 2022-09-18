@@ -1,31 +1,31 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1,
-            maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui,
-            viewport-fit=cover">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="format-detection" content="telephone=no">
-        <meta name="msapplication-tap-highlight" content="no">
-        <meta name="color-scheme" content="light dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,
+      maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui,
+      viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="color-scheme" content="light dark">
 
-        <!-- Your app title -->
-        <title>TradeIn</title>
-        <!-- Path to Framework7 Library CSS -->
-        <link rel="stylesheet" href="lib/framework7/framework7-bundle.css">
-        <!-- Path to icons -->
-        <link rel="stylesheet" href="css/icons.css">
-        <!-- Path to your custom app styles-->
-        <link rel="stylesheet" href="css/app.css">
-    </head>
+    <!-- Your app title -->
+    <title>TradeIn</title>
+    <!-- Path to Framework7 Library CSS -->
+    <link rel="stylesheet" href="lib/framework7/framework7-bundle.css">
+    <!-- Path to icons -->
+    <link rel="stylesheet" href="css/icons.css">
+    <!-- Path to your custom app styles-->
+    <link rel="stylesheet" href="css/app.css">
+  </head>
 
-    <body>
-        <div id="app">
-            <div class="statusbar"></div>
-            <div class="views tabs safe-areas">
+  <body>
+    <div id="app">
+      <div class="statusbar"></div>
+      <div class="views tabs safe-areas">
 
-                <!-- <div class="toolbar tabbar toolbar-bottom">
+        <!-- <div class="toolbar tabbar toolbar-bottom">
                     <div class="toolbar-inner">
                         <a href="/" class="tab-link tab-link-active">
                             <i class="f7-icons icon">house</i>
@@ -37,68 +37,64 @@
                         </a>
                         <a href="#account" class="tab-link">
                             <i class="f7-icons icon">person</i>
-                            <span class="tabbar-label">Cuenta</span>
+                            <span class="tabbar-label">cuenta</span>
                         </a>
                     </div>
                 </div> -->
-
-                <div class="view view-main tab-active view-init tab" id="home" data-url="/">
-                    <div class="page page-current">
-                        <div class="text-align-center">
-                            <h1>TradeIn</h1>
-                            <h3>Login</h5>
-                        </div>
-                        <form class="list" id="my-form">
-                            <ul>
-                              <li>
-                                <div class="item-content item-input">
-                                  <div class="item-inner">
-                                    <div class="item-title item-label">Correo electrónico</div>
-                                    <div class="item-input-wrap">
-                                      <input type="email" name="email" placeholder="Correo electrónico" />
-                                    </div>
-                                  </div>
-                                </div>
-                              </li>
-                              <li>
-                                <div class="item-content item-input">
-                                  <div class="item-inner">
-                                    <div class="item-title item-label">Contraseña</div>
-                                    <div class="item-input-wrap">
-                                      <input type="password" name="password" placeholder="Contraseña" />
-                                    </div>
-                                  </div>
-                                </div>
-                              </li>
-                            </ul>
-                          </form>
-                          <div class="block row">
-                            <div class="col"><a class="button button-fill convert-form-to-data" href="#">Loguearse</a></div>
-                            <div class="col"><a class="button button-fill fill-form-from-data" href="/registro/">Registrarse</a></div>
-                          </div>
-                          <div class="row block">
-                            <div class="col"><a class="button button-fill fill-form-from-data" href="#">Entrar con Google</a></div>
-                          </div>
-                        <!-- <div class="navbar">
-                            <div class="navbar-bg"></div>
-                            <div class="navbar-inner">
-                                <div class="title">TradeIn</div>
-                            </div>
-                        </div>
-                        <div class="page-content">
-                            <div class="page-title">Inicio</div>
-                        </div> -->
-                    </div>
-                </div>
+        <div class="view view-main tab-active view-init tab" id="home"
+          data-url="/">
+          <div class="page page-current">
+            <div class="text-align-center">
+              <h1>TradeIn</h1>
+              <h3>Login</h5>
             </div>
+            <form class="list" id="my-form">
+              <ul>
+                <li>
+                  <div class="item-content item-input">
+                    <div class="item-inner">
+                      <div class="item-title item-label">Correo electrónico</div>
+                      <div class="item-input-wrap">
+                        <input type="email" name="email" placeholder="Correo
+                          electrónico" />
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="item-content item-input">
+                    <div class="item-inner">
+                      <div class="item-title item-label">Contraseña</div>
+                      <div class="item-input-wrap">
+                        <input type="password" name="password"
+                          placeholder="Contraseña" />
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </form>
+            <div class="block row">
+              <div class="col"><a class="button button-fill
+                  convert-form-to-data" href="#">Loguearse</a></div>
+              <div class="col"><a class="button button-fill fill-form-from-data"
+                  href="/registro/">Registrarse</a></div>
+            </div>
+            <div class="row block">
+              <div class="col"><a class="button button-fill fill-form-from-data"
+                  href="#">Entrar con Google</a></div>
+            </div>
+          </div>
         </div>
+      </div>
+    </div>
 
 
-        <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript"
-            src="lib/framework7/framework7-bundle.min.js"></script>
-        <!--<script type="text/javascript" src="lib/framework7/framework7.js"></script>-->
-        <script type="text/javascript" src="js/my-app.js"></script>
-    </body>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript"
+      src="lib/framework7/framework7-bundle.min.js"></script>
+    <script type="text/javascript" src="lib/framework7/framework7.js"></script>
+    <script type="text/javascript" src="js/my-app.js"></script>
+  </body>
 
 </html>
