@@ -44,18 +44,23 @@ var app = new Framework7({
 
 var mainView = app.views.create('.view-main');
 
+
 // Handle Cordova Device Ready Event
 $$(document).on('deviceready', function () {
   console.log("Device is ready!");
 });
 
 
-app.on('pageInit', function (page) {
+
+$$(document).on('page:init', '.page[data-name="about"]', function (e) {
   $$('.register-button').on('click', () => {
     console.log($$('#email').val());
   })
+})
 
 
+app.on('pageInit', function (page) {
+  
   if (page.route.name == 'inicio')
     if (page.route.route.options.props.userToken != '')
       mainView.router.navigate({ name: 'activos' })
