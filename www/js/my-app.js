@@ -1,4 +1,4 @@
-// If we need to use custom DOM library, let's save it to $$ variable:
+
 var $$ = Dom7;
 var app = new Framework7({
   // App root element
@@ -55,9 +55,54 @@ app.on('pageInit', function (page) {
     console.log($$('#email').val());
   })
 
-
   if (page.route.name == 'inicio')
-    if (page.route.route.options.props.userToken != '')
-      mainView.router.navigate({ name: 'activos' })
+    if (page.route.route.options.props.userToken != '') mainView.router.navigate({ name: 'activos' })
     else mainView.router.navigate({ name: 'inicio' })
 });
+
+
+
+
+
+$$(document).on('page:init', '.page[data-name="login"]', function (e) {
+  let provider = new firebase.auth.GoogleAuthProvider();
+
+  $$('#google-login').on('click', () => {
+    firebase.auth()
+      .signInWithPopup(provider)
+      .then((result) => {
+        let credential = result.credential;
+
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        let token = credential.accessToken;
+        // The signed-in user info.
+        let user = result.user;
+        console.log(token);
+      }).catch((error) => {
+        // Handle Errors here.
+        let errorCode = error.code;
+        let errorMessage = error.message;
+        // The email of the user's account used.
+        let email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        let credential = error.credential;
+        // ...
+      });
+  })
+
+  $$('#user-login').on('click', () => {
+    firebase.auth().createUserWithEmailAndPassword($$('#email-input').value(),$$('#password-input').value() )
+      .then((userCredential) => {
+        // Signed in
+        var user = userCredential.user;
+        console.log(user);
+        // ...
+      })
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // ..
+        console.log(error);
+      });
+  })
+})
