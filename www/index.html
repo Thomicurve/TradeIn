@@ -1,83 +1,88 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1,
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,
       maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui,
       viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="format-detection" content="telephone=no">
-  <meta name="msapplication-tap-highlight" content="no">
-  <meta name="color-scheme" content="light dark">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="color-scheme" content="light dark">
 
-  <!-- Your app title -->
-  <title>TradeIn</title>
-  <!-- Path to Framework7 Library CSS -->
-  <link rel="stylesheet" href="lib/framework7/framework7-bundle.css">
-  <!-- Path to icons -->
-  <link rel="stylesheet" href="css/icons.css">
-  <!-- Path to your custom app styles-->
-  <link rel="stylesheet" href="css/app.css">
-</head>
+    <!-- Your app title -->
+    <title>TradeIn</title>
+    <!-- Path to Framework7 Library CSS -->
+    <link rel="stylesheet" href="lib/framework7/framework7-bundle.css">
+    <!-- Path to icons -->
+    <link rel="stylesheet" href="css/icons.css">
+    <!-- Path to your custom app styles-->
+    <link rel="stylesheet" href="css/app.css">
+  </head>
 
-<body>
-  <div id="app">
-    <div class="statusbar"></div>
-    <div class="views tabs safe-areas">
-      <div class="view view-main tab-active view-init tab page" id="home" data-url="/" data-name="login">
-        <div class="page page-current">
-          <div class="text-align-center">
-            <h1>TradeIn</h1>
-            <h3>Login</h5>
-          </div>
-          <form class="list" id="my-form">
-            <ul>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">Correo electrónico</div>
-                    <div class="item-input-wrap">
-                      <input type="email" name="email" id="email-input" value="hola" placeholder="Correo
-                          electrónico" />
+  <body>
+    <div id="app">
+      <div class="statusbar"></div>
+      <div class="views tabs safe-areas">
+        <div class="view view-main tab-active view-init tab page" id="home"
+          data-url="/" data-name="login">
+          <div class="page page-current">
+            <div class="text-align-center">
+              <h1>TradeIn</h1>
+              <h3>Inicio de Sesión</h5>
+              <p>Inicie sesión con su cuenta de Invertir Online.</p>
+            </div>
+            <form class="list" id="login-form">
+              <ul>
+                <li>
+                  <div class="item-content item-input">
+                    <div class="item-inner">
+                      <div class="item-title item-label">Correo electrónico</div>
+                      <div class="item-input-wrap">
+                        <input type="email" name="email" id="email-input"
+                          placeholder="Correo
+                          electrónico" required/>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </li>
-              <li>
-                <div class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">Contraseña</div>
-                    <div class="item-input-wrap">
-                      <input type="password" id="password-input"  name="password" placeholder="Contraseña" />
+                </li>
+                <li>
+                  <div class="item-content item-input">
+                    <div class="item-inner">
+                      <div class="item-title item-label">Contraseña</div>
+                      <div class="item-input-wrap">
+                        <input type="password" id="password-input"
+                          name="password" required placeholder="Contraseña" />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </li>
-            </ul>
-          </form>
-          <div class="block row">
-            <div class="col"><a class="button button-fill
-                  convert-form-to-data" href="#" id="user-login">Loguearse</a></div>
-            <div class="col"><a class="button button-fill fill-form-from-data" href="/registro/">Registrarse</a></div>
-          </div>
-          <div class="row block">
-            <div class="col"><a class="button button-fill fill-form-from-data" href="#" id="google-login">Entrar con
-                Google</a></div>
+                </li>
+              </ul>
+              <div class="block">
+                <div><button type="submit" class="button button-fill
+                    convert-form-to-data" href="#" id="user-login">Iniciar sesión</button></div>
+              </div>
+            </form>
+            <div class="block">
+              <p class="text-align-center">No posee una cuenta de invertir online?</p>
+              <a class="button button-fill fill-form-from-data"
+                href="/registro/">Registrarse</a>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
 
-  <script type="text/javascript" src="cordova.js"></script>
-  <script type="text/javascript" src="lib/framework7/framework7-bundle.min.js"></script>
-  <script type="text/javascript" src="lib/framework7/framework7.js"></script>
-  <script type="text/javascript" src="js/my-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-auth.js"></script>
-  <script src="js/firebaseConfig.js"></script>
-</body>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript"
+      src="lib/framework7/framework7-bundle.min.js"></script>
+    <script type="text/javascript" src="lib/framework7/framework7.js"></script>
+    <script type="text/javascript" src="js/my-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.2/firebase-auth.js"></script>
+    <script src="js/firebaseConfig.js"></script>
+  </body>
 
 </html>

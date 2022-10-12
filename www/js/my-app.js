@@ -51,9 +51,6 @@ $$(document).on('deviceready', function () {
 
 
 app.on('pageInit', function (page) {
-  $$('.register-button').on('click', () => {
-    console.log($$('#email').val());
-  })
 
   if (page.route.name == 'inicio')
     if (page.route.route.options.props.userToken != '') mainView.router.navigate({ name: 'activos' })
@@ -63,46 +60,11 @@ app.on('pageInit', function (page) {
 
 
 
-
 $$(document).on('page:init', '.page[data-name="login"]', function (e) {
-  let provider = new firebase.auth.GoogleAuthProvider();
 
-  $$('#google-login').on('click', () => {
-    firebase.auth()
-      .signInWithPopup(provider)
-      .then((result) => {
-        let credential = result.credential;
+  $$('#login-form').on('submit', (e) => {
+    e.preventDefault()
+    console.log($$('#password-input').value());
 
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        let token = credential.accessToken;
-        // The signed-in user info.
-        let user = result.user;
-        console.log(token);
-      }).catch((error) => {
-        // Handle Errors here.
-        let errorCode = error.code;
-        let errorMessage = error.message;
-        // The email of the user's account used.
-        let email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        let credential = error.credential;
-        // ...
-      });
-  })
-
-  $$('#user-login').on('click', () => {
-    firebase.auth().createUserWithEmailAndPassword($$('#email-input').value(),$$('#password-input').value() )
-      .then((userCredential) => {
-        // Signed in
-        var user = userCredential.user;
-        console.log(user);
-        // ...
-      })
-      .catch((error) => {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // ..
-        console.log(error);
-      });
   })
 })
