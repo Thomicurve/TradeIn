@@ -61,10 +61,14 @@ app.on('pageInit', function (page) {
 
 
 $$(document).on('page:init', '.page[data-name="login"]', function (e) {
-
   $$('#login-form').on('submit', (e) => {
     e.preventDefault()
-    console.log($$('#password-input').value());
+    const inputPasword = $$('#password-input')
+    console.log(inputPasword) 
+    console.log(inputPasword[1].value);
 
+    const inputEmail = $$('#email-input')
+    console.log(inputEmail) 
+    console.log(inputEmail[1].value);
   })
 })

@@ -57,5 +57,13 @@
     "platforms": [
       "browser"
     ]
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Thomicurve/TradeIn.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Thomicurve/TradeIn/issues"
+  },
+  "homepage": "https://github.com/Thomicurve/TradeIn#readme"
 }
