@@ -51,7 +51,11 @@ var app = new Framework7({
 
 
 var mainView = app.views.create(".view-main");
-let userToken = "";
+/**
+ * La key con la que se va a identificar las credenciales del usuario
+ * en el localstorage
+ */
+let credentialsKey = "userCredentials"; 
 
 // Handle Cordova Device Ready Event
 $$(document).on("deviceready", function () {
@@ -69,92 +73,39 @@ app.on("pageInit", function (page) {
   }
 );
 
-// leer el token
-async function readToken() {
-  let token = await fetch("token.json");
-  return JSON.parse(token);
+/**
+ * Funcion para iniciar sesion ingresando los datos manualmente
+ * @param {String} email 
+ * @param {String} password
+*/
+function Login(email, password) {
+  firebase.auth().signInWithEmailAndPassword(email, password)
+    .then(userCredential => console.log(userCredential.user))
+    .catch(error => console.error("Login error: " + error));
 }
 
-// funcion para refrescar el token del usuario logueado
-async function auth() {
-  let exists = await fetch("./auth.json");
-  if (exists) {
-    let tokenData = await fetch("./auth.json");
-    token = JSON.parse(tokenData);
-    if (new Date(token[".expires"]) < new Date()) {
-      await getToken(token.refresh_token);
-      return await readToken();
-    } else {
-      return token;
-    }
-  } else {
-    await getToken();
-    return await readToken();
-  }
+function GoogleLogin() {
+  let provider = new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithPopup(provider)
+    .then(result => {
+      // localStorage.setItem(credentialsKey, result.)
+    })
+    .catch(error => console.error(error));
 }
 
-// obtener el token de la sesion del usuario
-async function getToken(refreshToken) {
-  let creds = "";
-  if (refreshToken) {
-    creds = querystring.stringify({
-      refresh_token: refreshToken,
-      grant_type: "refresh_token",
-    });
-  } else {
-    creds = querystring.stringify(credentials);
-  }
-  let token = await fetch("https://api.invertironline.com/token", {
-    method: "POST",
-    mode: "cors",
-    creds,
-  });
-  await fetch("token.json", JSON.stringify(token.data));
-}
 
-// peticion de login a la api de iol
-const login = async (email, passw) => {
-  let headersList = {
-    Accept: "*/*",
-    "User-Agent": "Thunder Client (https://www.thunderclient.com)",
-    "Content-Type": "application/x-www-form-urlencoded",
-  };
-  let bodyContent = `password=${passw}&username=${email}&grant_type=password`;
-
-  try {
-    let response = await fetch("https://api.invertironline.com/token", {
-      method: "POST",
-      body: bodyContent,
-      headers: headersList,
-    });
-
-    let data = await response.json();
-    Swal.fire({
-      icon: "success",
-      title: "Login Exitoso",
-      text: "Inicio de sesion completado!",
-    });
-
-    app.store.state.userToken = data.access_token; 
-  } catch (error) {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: "Error al iniciar sesion!",
-    });
-    console.info(error);
-  }
-};
 
 $$(document).on("page:init", '.page[data-name="login"]', function (e) {
   console.log(this);
   // envio del formulario de login
   $$("#login-form").on("submit", (e) => {
     e.preventDefault();
-    const inputPasword = $$("#password-input").val();
-    const inputEmail = $$("#email-input").val();
-    
+    const inputPasword = $$("#password-input")[1].value;
+    const inputEmail = $$("#email-input")[1].value;
+    Login(inputEmail, inputPasword);
+  });
 
-    login(inputEmail, inputPasword);
+  $$("#google-login").on("click", (e) => {
+    GoogleLogin();
   });
 });
