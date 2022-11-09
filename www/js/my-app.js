@@ -1,20 +1,8 @@
 var $$ = Dom7;
-// save store as global object
-const store = Framework7.createStore({
-  state: {
-    userToken: "",
-  },
-  getters: {
-    getUserToken({ state }) {
-      return state;
-    },
-  },
-});
 
 var app = new Framework7({
   // App root element
   root: "#app",
-  store,
   // App Name
   name: "TradeIn",
   // App id
@@ -51,28 +39,41 @@ var app = new Framework7({
 
 
 var mainView = app.views.create(".view-main");
-/**
- * La key con la que se va a identificar las credenciales del usuario
- * en el localstorage
- */
-let credentialsKey = "userCredentials"; 
 
 // Handle Cordova Device Ready Event
 $$(document).on("deviceready", function () {
   console.log("Device is ready!");
 });
 
-app.on("pageInit", function (page) {
-  // verifica que exista el token del usuario en la sesion actual
-    if (app.store.state.userToken != "") {
-      mainView.router.navigate({ name: "activos" });
-    } else {
-      mainView.router.navigate({ name: "inicio" });
-    }
+let userSessionItemKey = "userSession";
+/**
+ * Obtiene la sesion del usuario desde el onAuthStateChanged de firebase.
+ */
+function getUserSession() {
+  const userSession = localStorage.getItem(userSessionItemKey);
+  if(userSession == "null") return false
+  else return true;
+}
 
-  }
+/**
+ * Verifica que el usuario se encuentre logueado, de no ser asi
+ * se envia al usuario a la pantalla de login
+ */
+function verifyUserSession() {
+  const userSession = getUserSession();
+  if (userSession)
+    mainView.router.navigate({ name: "activos" });
+  else
+    mainView.router.navigate({ name: "inicio" });
+}
+
+app.on("pageInit", function (page) {
+  verifyUserSession();
+}
 );
 
+
+// * AUTENTICACION
 /**
  * Funcion para iniciar sesion ingresando los datos manualmente
  * @param {String} email 
@@ -80,23 +81,77 @@ app.on("pageInit", function (page) {
 */
 function Login(email, password) {
   firebase.auth().signInWithEmailAndPassword(email, password)
-    .then(userCredential => console.log(userCredential.user))
-    .catch(error => console.error("Login error: " + error));
+    .then(({ user: { uid } }) => {
+      Swal.fire({
+        title: 'Inicio de sesión',
+        text: 'Inicio de sesión exitoso',
+        icon: 'success',
+        timer: 2000,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      })
+      localStorage.setItem(userSessionItemKey, uid)
+      verifyUserSession(uid);
+    })
+    .catch(error => {
+      Swal.fire({
+        title: 'Error',
+        text: 'Error al iniciar sesión',
+        icon: 'error',
+      })
+      console.error("Login error: " + error)
+    } );
 }
 
 function GoogleLogin() {
   let provider = new firebase.auth.GoogleAuthProvider();
   firebase.auth().signInWithPopup(provider)
-    .then(result => {
-      // localStorage.setItem(credentialsKey, result.)
+    .then(({ user: { uid } }) => {
+      Swal.fire({
+        title: 'Inicio de sesión',
+        text: 'Inicio de sesión exitoso',
+        icon: 'success',
+        timer: 2000,
+        showConfirmButton: false,
+        timerProgressBar: true,
+      })
+      localStorage.setItem(userSessionItemKey, uid)
+      verifyUserSession();
     })
-    .catch(error => console.error(error));
+    .catch(error => {
+      console.error(error);
+      Swal.fire({
+        title: 'Error',
+        text: 'Error al iniciar sesión',
+        icon: 'error',
+      })
+    });
 }
 
-
+function LogOut() {
+  firebase.auth().signOut().then(() => {
+    Swal.fire({
+      title: 'Cerrar sesión',
+      text: 'Se cerró la sesión del usuario correctamente',
+      icon: 'success',
+      timer: 2000,
+      showConfirmButton: false,
+      timerProgressBar: true,
+    })
+    localStorage.setItem(userSessionItemKey, null);
+    verifyUserSession();
+  }).catch((error) => {
+    Swal.fire({
+      title: 'Error',
+      text: 'Error al cerrar sesión',
+      icon: 'error',
+    })
+    console.error("error al cerrar sesion:", error)
+  });
+}
+// ***************************************************************
 
 $$(document).on("page:init", '.page[data-name="login"]', function (e) {
-  console.log(this);
   // envio del formulario de login
   $$("#login-form").on("submit", (e) => {
     e.preventDefault();
@@ -107,5 +162,11 @@ $$(document).on("page:init", '.page[data-name="login"]', function (e) {
 
   $$("#google-login").on("click", (e) => {
     GoogleLogin();
+  });
+});
+
+$$(document).on("page:init", '.page[data-name="activos"]', function (e) {
+  $$("#logout-button").on("click", (e) => {
+    LogOut();
   });
 });
