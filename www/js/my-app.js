@@ -149,14 +149,38 @@ function LogOut() {
     console.error("error al cerrar sesion:", error)
   });
 }
-// ***************************************************************
+
+function Register (email, password, repeatedPassword) {
+  try {
+    if(password === repeatedPassword) {
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        Swal.fire({
+          title: 'Registro',
+          text: 'Se creó la cuenta correctamente',
+          icon: 'success',
+          timer: 2000,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        })
+        mainView.router.navigate({name: "inicio"})
+      })
+    } else {
+      throw new Error("Las contraseñas no coinciden");
+    }
+  } catch(error) {
+    console.error(error);
+  };
+}
 
 $$(document).on("page:init", '.page[data-name="login"]', function (e) {
   // envio del formulario de login
   $$("#login-form").on("submit", (e) => {
     e.preventDefault();
-    const inputPasword = $$("#password-input")[1].value;
-    const inputEmail = $$("#email-input")[1].value;
+    const inputPasword = 
+      $$("#password-input")[1] ? $$("#password-input")[1].value : $$("#password-input")[0].value;
+    const inputEmail = 
+      $$("#email-input")[1] ? $$("#email-input")[1].value : $$("#email-input")[0].value;
     Login(inputEmail, inputPasword);
   });
 
@@ -165,8 +189,22 @@ $$(document).on("page:init", '.page[data-name="login"]', function (e) {
   });
 });
 
+$$(document).on("page:init", '.page[data-name="registro"]', function (e) {
+  $$(".register-button").on("click", (e) => {
+    const email = $$("#email")[0].value;
+    const password = $$("#password")[0].value;
+    const repeatedPassword = $$("#repeatedPassword")[0].value;
+    const fullname = $$("#fullname")[0].value;
+    Register(email, password, repeatedPassword);
+  });
+});
+// ***************************************************************
+
+
+
 $$(document).on("page:init", '.page[data-name="activos"]', function (e) {
   $$("#logout-button").on("click", (e) => {
     LogOut();
   });
 });
+
