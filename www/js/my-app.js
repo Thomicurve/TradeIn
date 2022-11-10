@@ -203,6 +203,12 @@ $$(document).on("page:init", '.page[data-name="registro"]', function (e) {
 
 
 $$(document).on("page:init", '.page[data-name="activos"]', function (e) {
+  const db = firebase.firestore();
+  db.collection("products").get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+        console.log(`${doc.id} => ${doc.data()}`);
+    });
+});
   $$("#logout-button").on("click", (e) => {
     LogOut();
   });

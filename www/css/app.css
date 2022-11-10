@@ -774,3 +774,47 @@ code {
 .f7-icons .icon {
   padding-top: 2px;
 }
+
+input::placeholder {
+  color: #9999;
+}
+
+.auth-inputs {
+  background-color: #ffff;
+}
+
+.login-title {
+  color: #11D990;
+}
+
+.auth-inputs input {
+  color: #888;
+}
+
+.register-link {
+  color: #54dd9d;
+}
+
+.inputs {
+  color: rgb(112, 112, 112);
+}
+
+.auth-buttons {
+  background: linear-gradient(to left,#11D990, #038C3E) ;
+  color: white;
+
+}
+
+.back-button {
+  background-color: #9E14D9;
+  color: #ffff;
+  text-decoration: none;
+}
+
+.back-button:hover {
+  color: #fff;
+}
+
+.page {
+  background-color: #061D26;
+}

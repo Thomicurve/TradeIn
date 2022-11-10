@@ -1,11 +1,10 @@
 
 <div class="view view-main tab-active view-init tab page" id="home" data-name="registro" data-url="/register/">
   <div class="page page-current">
-    <div class="text-align-center">
-      <h1>TradeIn</h1>
-      <h3>Login</h5>
+    <div class="text-align-center mt-5 mb-5">
+      <h1 class="login-title">Registro</h1>
     </div>
-    <form class="list" id="my-form">
+    <!-- <form class="list" id="my-form">
       <ul>
         <li>
           <div class="item-content item-input">
@@ -52,12 +51,37 @@
           </div>
         </li>
       </ul>
-    </form>
-    <div class="block row">
-      <div class="col"><a class="button button-fill register-button" href="#">Registrarse</a></div>
-    </div>
-    <div class="row block">
-      <div class="col"><a class="button button-fill fill-form-from-data"
-          href="/">Volver</a></div>
-    </div>
+    </form> -->
+    <form class="w-75 mx-auto" id="login-form">
+      <div class="auth-inputs item-content item-input rounded py-2 px-3 my-3">
+        <div class="item-inner">
+          <div class="item-title item-label">Correo electrónico</div>
+          <div class="item-input-wrap w-100">
+            <input type="email" class="w-100" name="email" id="email-input" placeholder="Ejemplo@mail.com" required />
+          </div>
+        </div>
+      </div>
+      <div class="auth-inputs item-content item-input rounded py-2 px-3 my-3">
+        <div class="item-inner">
+          <div class="item-title item-label">Contraseña</div>
+          <div class="item-input-wrap w-100">
+            <input type="password" class="w-100" id="password-input" name="password" required placeholder="Test123" />
+          </div>
+        </div>
+      </div>
+      <div class="auth-inputs item-content item-input rounded py-2 px-3 my-3">
+        <div class="item-inner">
+          <div class="item-title item-label">Repetir contraseña</div>
+          <div class="item-input-wrap w-100">
+            <input type="password" class="w-100" id="password-input" name="password" required placeholder="Test123" />
+          </div>
+        </div>
+      </div>
+  <div>
+    <div><button type="submit" class="button auth-buttons
+          convert-form-to-data mb-3" href="#" id="user-login">Registrarse</button></div>
+    <div><a class="button 
+        convert-form-to-data back-button" href="/" >Regresar</a></div>
+  </div>
+</form>
 </div>
