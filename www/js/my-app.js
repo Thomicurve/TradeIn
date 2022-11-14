@@ -51,7 +51,7 @@ let userSessionItemKey = "userSession";
  */
 function getUserSession() {
   const userSession = localStorage.getItem(userSessionItemKey);
-  if(userSession == "null") return false
+  if (userSession == "null") return false
   else return true;
 }
 
@@ -100,7 +100,7 @@ function Login(email, password) {
         icon: 'error',
       })
       console.error("Login error: " + error)
-    } );
+    });
 }
 
 function GoogleLogin() {
@@ -150,25 +150,25 @@ function LogOut() {
   });
 }
 
-function Register (email, password, repeatedPassword) {
+function Register(email, password, repeatedPassword) {
   try {
-    if(password === repeatedPassword) {
+    if (password === repeatedPassword) {
       firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        Swal.fire({
-          title: 'Registro',
-          text: 'Se creó la cuenta correctamente',
-          icon: 'success',
-          timer: 2000,
-          showConfirmButton: false,
-          timerProgressBar: true,
+        .then(() => {
+          Swal.fire({
+            title: 'Registro',
+            text: 'Se creó la cuenta correctamente',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false,
+            timerProgressBar: true,
+          })
+          mainView.router.navigate({ name: "inicio" })
         })
-        mainView.router.navigate({name: "inicio"})
-      })
     } else {
       throw new Error("Las contraseñas no coinciden");
     }
-  } catch(error) {
+  } catch (error) {
     console.error(error);
   };
 }
@@ -177,9 +177,9 @@ $$(document).on("page:init", '.page[data-name="login"]', function (e) {
   // envio del formulario de login
   $$("#login-form").on("submit", (e) => {
     e.preventDefault();
-    const inputPasword = 
+    const inputPasword =
       $$("#password-input")[1] ? $$("#password-input")[1].value : $$("#password-input")[0].value;
-    const inputEmail = 
+    const inputEmail =
       $$("#email-input")[1] ? $$("#email-input")[1].value : $$("#email-input")[0].value;
     Login(inputEmail, inputPasword);
   });
@@ -200,15 +200,25 @@ $$(document).on("page:init", '.page[data-name="registro"]', function (e) {
 });
 // ***************************************************************
 
+let productsStore = [];
 
+/**
+ * Obtiene los productos de la tienda desde firebase.
+ * Luego los coloca dentro de los productsStore
+ */
+async function getProducts() {
+  const db = firebase.firestore();
+
+  let productsCollection = db.collection("products");
+  const querySnapshot = await productsCollection.get();
+  querySnapshot.forEach(doc => {
+    productsStore.push(doc.data());
+  })
+}
 
 $$(document).on("page:init", '.page[data-name="activos"]', function (e) {
-  const db = firebase.firestore();
-  db.collection("products").get().then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-        console.log(`${doc.id} => ${doc.data()}`);
-    });
-});
+  if (productsStore.length == 0) getProducts();
+
   $$("#logout-button").on("click", (e) => {
     LogOut();
   });
