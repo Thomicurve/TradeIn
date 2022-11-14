@@ -217,8 +217,43 @@ async function getProducts() {
   })
 }
 
+async function createProductCards() {
+  if (productsStore.length == 0) await getProducts();
+
+
+
+  const fragment = document.createDocumentFragment();
+  productsStore.forEach(product => {
+    const productCardContainer = document.createElement("div");
+    productCardContainer.setAttribute("class", "col-md-4");
+
+    const appendChildsFromProductCard = (child) => productCardContainer.appendChild(child);
+
+    const productImage = document.createElement("img");
+    productImage.setAttribute("src", product.image);
+    productImage.width = 100;
+
+    const productName = document.createElement("p");
+    productName.textContent = product.name;
+
+    const productPrice = document.createElement("p");
+    productPrice.textContent = "$" + product.price;
+    productPrice.style.color = "red";
+
+
+    appendChildsFromProductCard(productImage);
+    appendChildsFromProductCard(productName);
+    appendChildsFromProductCard(productPrice);
+    fragment.appendChild(productCardContainer);
+  })
+
+
+  $$(".product-list").append(fragment);
+}
+
 $$(document).on("page:init", '.page[data-name="activos"]', function (e) {
-  if (productsStore.length == 0) getProducts();
+
+  createProductCards();
 
   $$("#logout-button").on("click", (e) => {
     LogOut();
