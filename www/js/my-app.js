@@ -40,6 +40,7 @@ var app = new Framework7({
 
 var mainView = app.views.create(".view-main");
 
+
 // Handle Cordova Device Ready Event
 $$(document).on("deviceready", function () {
   console.log("Device is ready!");
