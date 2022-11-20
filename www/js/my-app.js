@@ -236,6 +236,9 @@ $$(document).on("page:init", '.page[data-name="registro"]', function (e) {
 });
 // ***************************************************************
 
+
+
+// * TIENDA
 let productsStore = [];
 
 /**
@@ -251,6 +254,7 @@ async function getProducts() {
     productsStore.push(doc.data());
   })
 }
+
 
 /**
  * Crea las cartas de productos que se van a visualizar en la ux
@@ -292,9 +296,45 @@ async function createProductCards() {
 $$(document).on("page:init", '.page[data-name="tienda"]', function (e) {
 
   createProductCards();
-
   $$("#logout-button").on("click", (e) => {
     LogOut();
   });
+});
+// ***************************************************************************************
+
+
+// * MI CUENTA
+
+/**
+ * Obtiene la informacion del usuario desde el firestore
+ */
+async function getAccountInfo() {
+  let userData = {};
+
+  const userID = localStorage.getItem(userSessionItemKey);
+  const db = firebase.firestore();
+
+  let usersCollection = db.collection("users").where("id", "==", userID);
+  const querySnapshot = await usersCollection.get();
+  querySnapshot.forEach(doc => {
+    userData = doc.data();
+  })
+
+  return userData;
+}
+
+/**
+ * Dibuja toda la informacion del usuario en la pantalla
+ */
+async function showAccountInfo() {
+  const userData = await getAccountInfo();
+  $$(".account-info").append(`
+  <div><h5 class="text-primary">Nombre: ${userData.fullname}</h5></div>
+  <div><p class="text-info">Correo electronico: ${userData.email}</p></div>`)
+}
+
+$$(document).on("page:init", '.page[data-name="cuenta"]', function (e) {
+
+  showAccountInfo()
 });
 
