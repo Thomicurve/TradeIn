@@ -267,13 +267,23 @@ async function createProductCards() {
   const fragment = document.createDocumentFragment();
   productsStore.forEach(product => {
     const productCardContainer = document.createElement("div");
-    productCardContainer.setAttribute("class", "col-md-4");
+    productCardContainer.setAttribute("class", "col-md-4 my-5");
 
     const appendChildsFromProductCard = (child) => productCardContainer.appendChild(child);
 
     const productImage = document.createElement("img");
     productImage.setAttribute("src", product.image);
     productImage.width = 100;
+
+    const addToCartButton = document.createElement("button");
+    addToCartButton.textContent = "Agregar al carrito";
+    addToCartButton.setAttribute("class", "bg-primary");
+
+
+    const viewProductButton = document.createElement("button");
+    viewProductButton.textContent = "Ver detalle";
+    viewProductButton.setAttribute("class", "bg-success");
+
 
     const productName = document.createElement("p");
     productName.textContent = product.name;
@@ -286,6 +296,8 @@ async function createProductCards() {
     appendChildsFromProductCard(productImage);
     appendChildsFromProductCard(productName);
     appendChildsFromProductCard(productPrice);
+    appendChildsFromProductCard(addToCartButton);
+    appendChildsFromProductCard(viewProductButton);
     fragment.appendChild(productCardContainer);
   })
 
@@ -337,4 +349,3 @@ $$(document).on("page:init", '.page[data-name="cuenta"]', function (e) {
 
   showAccountInfo()
 });
-
