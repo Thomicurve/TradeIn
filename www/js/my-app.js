@@ -19,9 +19,9 @@ var app = new Framework7({
       url: "./pages/account.html",
     },
     {
-      path: "/activos/",
-      name: "activos",
-      url: "./pages/actives.html",
+      path: "/tienda/",
+      name: "tienda",
+      url: "./pages/store.html",
     },
     {
       path: "/registro/",
@@ -52,7 +52,7 @@ let userSessionItemKey = "userSession";
  */
 function getUserSession() {
   const userSession = localStorage.getItem(userSessionItemKey);
-  if (userSession == "null") return false
+  if (userSession == null || userSession == "null") return false
   else return true;
 }
 
@@ -63,7 +63,7 @@ function getUserSession() {
 function verifyUserSession() {
   const userSession = getUserSession();
   if (userSession)
-    mainView.router.navigate({ name: "activos" });
+    mainView.router.navigate({ name: "tienda" });
   else
     mainView.router.navigate({ name: "inicio" });
 }
@@ -217,6 +217,9 @@ async function getProducts() {
   })
 }
 
+/**
+ * Crea las cartas de productos que se van a visualizar en la ux
+ */
 async function createProductCards() {
   if (productsStore.length == 0) await getProducts();
 
@@ -251,7 +254,7 @@ async function createProductCards() {
   $$(".product-list").append(fragment);
 }
 
-$$(document).on("page:init", '.page[data-name="activos"]', function (e) {
+$$(document).on("page:init", '.page[data-name="tienda"]', function (e) {
 
   createProductCards();
 
