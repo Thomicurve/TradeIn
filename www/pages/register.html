@@ -4,60 +4,20 @@
     <div class="text-align-center mt-5 mb-5">
       <h1 class="login-title">Registro</h1>
     </div>
-    <!-- <form class="list" id="my-form">
-      <ul>
-        <li>
-          <div class="item-content item-input">
-            <div class="item-inner">
-              <div class="item-title item-label">Correo electrónico</div>
-              <div class="item-input-wrap">
-                <input type="email" id="email" name="email" placeholder="Correo
-                  electrónico" />
-              </div>
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="item-content item-input">
-            <div class="item-inner">
-              <div class="item-title item-label">Nombre Completo</div>
-              <div class="item-input-wrap">
-                <input type="text" name="fullname" id="fullname" placeholder="Nombre
-                  Completo" />
-              </div>
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="item-content item-input">
-            <div class="item-inner">
-              <div class="item-title item-label">Contraseña</div>
-              <div class="item-input-wrap">
-                <input type="password" id="password" name="password"
-                  placeholder="Contraseña" />
-              </div>
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="item-content item-input">
-            <div class="item-inner">
-              <div class="item-title item-label">Repetir Contraseña</div>
-              <div class="item-input-wrap">
-                <input type="password" id="repeatedPassword" name="repeatedPassword"
-                  placeholder="Repetir Contraseña" />
-              </div>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </form> -->
-    <form class="w-75 mx-auto" id="login-form">
+    <form class="w-75 mx-auto">
       <div class="auth-inputs item-content item-input rounded py-2 px-3 my-3">
         <div class="item-inner">
           <div class="item-title item-label">Correo electrónico</div>
           <div class="item-input-wrap w-100">
-            <input type="email" class="w-100" name="email" id="email-input" placeholder="Ejemplo@mail.com" required />
+            <input type="email" class="w-100" name="email" id="email-register-input" placeholder="Ejemplo@mail.com" required />
+          </div>
+        </div>
+      </div>
+      <div class="auth-inputs item-content item-input rounded py-2 px-3 my-3">
+        <div class="item-inner">
+          <div class="item-title item-label">Nombre Completo</div>
+          <div class="item-input-wrap w-100">
+            <input type="email" class="w-100" name="email" id="fullname" placeholder="nombre apellido" required />
           </div>
         </div>
       </div>
@@ -65,7 +25,7 @@
         <div class="item-inner">
           <div class="item-title item-label">Contraseña</div>
           <div class="item-input-wrap w-100">
-            <input type="password" class="w-100" id="password-input" name="password" required placeholder="Test123" />
+            <input type="password" class="w-100" id="password-register-input" name="password" required placeholder="Test123" />
           </div>
         </div>
       </div>
@@ -73,13 +33,13 @@
         <div class="item-inner">
           <div class="item-title item-label">Repetir contraseña</div>
           <div class="item-input-wrap w-100">
-            <input type="password" class="w-100" id="password-input" name="password" required placeholder="Test123" />
+            <input type="password" class="w-100" id="repeatedpassword-input" name="password" required placeholder="Test123" />
           </div>
         </div>
       </div>
   <div>
-    <div><button type="submit" class="button auth-buttons
-          convert-form-to-data mb-3" href="#" id="user-login">Registrarse</button></div>
+    <div><button type="button" class="button auth-buttons
+          convert-form-to-data mb-3" href="#" id="user-register">Registrarse</button></div>
     <div><a class="button 
         convert-form-to-data back-button" href="/" >Regresar</a></div>
   </div>

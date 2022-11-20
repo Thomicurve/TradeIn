@@ -74,7 +74,32 @@ app.on("pageInit", function (page) {
 );
 
 
+// * HELPERS
+function ShowErrorAlert(message) {
+  Swal.fire({
+    title: 'Error',
+    text: message,
+    icon: 'error',
+    timer: 2000,
+    showConfirmButton: false,
+    timerProgressBar: true,
+  })
+}
+
+
 // * AUTENTICACION
+
+async function SaveUserIntoDB(UserData) {
+  const { id, fullname, email } = UserData;
+  const db = firebase.firestore();
+  let usersCollection = db.collection("users");
+
+  await usersCollection.doc(id).set({
+    fullname,
+    email,
+    id
+  });
+}
 /**
  * Funcion para iniciar sesion ingresando los datos manualmente
  * @param {String} email 
@@ -82,7 +107,7 @@ app.on("pageInit", function (page) {
 */
 function Login(email, password) {
   firebase.auth().signInWithEmailAndPassword(email, password)
-    .then(({ user: { uid } }) => {
+    .then(({ user }) => {
       Swal.fire({
         title: 'Inicio de sesión',
         text: 'Inicio de sesión exitoso',
@@ -91,8 +116,8 @@ function Login(email, password) {
         showConfirmButton: false,
         timerProgressBar: true,
       })
-      localStorage.setItem(userSessionItemKey, uid)
-      verifyUserSession(uid);
+      localStorage.setItem(userSessionItemKey, user.uid)
+      verifyUserSession(user.uid);
     })
     .catch(error => {
       Swal.fire({
@@ -107,7 +132,7 @@ function Login(email, password) {
 function GoogleLogin() {
   let provider = new firebase.auth.GoogleAuthProvider();
   firebase.auth().signInWithPopup(provider)
-    .then(({ user: { uid } }) => {
+    .then(({ user }) => {
       Swal.fire({
         title: 'Inicio de sesión',
         text: 'Inicio de sesión exitoso',
@@ -116,7 +141,12 @@ function GoogleLogin() {
         showConfirmButton: false,
         timerProgressBar: true,
       })
-      localStorage.setItem(userSessionItemKey, uid)
+      localStorage.setItem(userSessionItemKey, user.uid)
+      SaveUserIntoDB({
+        id: user.uid,
+        fullname: user.displayName,
+        email: user.email
+      });
       verifyUserSession();
     })
     .catch(error => {
@@ -151,11 +181,11 @@ function LogOut() {
   });
 }
 
-function Register(email, password, repeatedPassword) {
+function Register(email, password, repeatedPassword, fullname) {
   try {
     if (password === repeatedPassword) {
       firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then(() => {
+        .then(({ user }) => {
           Swal.fire({
             title: 'Registro',
             text: 'Se creó la cuenta correctamente',
@@ -164,12 +194,17 @@ function Register(email, password, repeatedPassword) {
             showConfirmButton: false,
             timerProgressBar: true,
           })
+          SaveUserIntoDB({
+            id: user.uid,
+            fullname: fullname,
+            email: email
+          })
           mainView.router.navigate({ name: "inicio" })
-        })
-    } else {
-      throw new Error("Las contraseñas no coinciden");
-    }
+        }).catch(({ message }) => ShowErrorAlert(message))
+    } else throw new Error("Las contraseñas no coinciden");
+
   } catch (error) {
+    ShowErrorAlert(error)
     console.error(error);
   };
 }
@@ -191,12 +226,12 @@ $$(document).on("page:init", '.page[data-name="login"]', function (e) {
 });
 
 $$(document).on("page:init", '.page[data-name="registro"]', function (e) {
-  $$(".register-button").on("click", (e) => {
-    const email = $$("#email")[0].value;
-    const password = $$("#password")[0].value;
-    const repeatedPassword = $$("#repeatedPassword")[0].value;
-    const fullname = $$("#fullname")[0].value;
-    Register(email, password, repeatedPassword);
+  $$("#user-register").on("click", (e) => {
+    const email = $$("#email-register-input").val();
+    const password = $$("#password-register-input").val();
+    const repeatedPassword = $$("#repeatedpassword-input").val();
+    const fullname = $$("#fullname").val();
+    Register(email, password, repeatedPassword, fullname);
   });
 });
 // ***************************************************************
