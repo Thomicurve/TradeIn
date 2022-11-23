@@ -1,3 +1,125 @@
+/*
+* Abstracts
+*/
+:root {
+    --tipo-principal: 'Exo 2', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+    vertical-align: baseline;
+}
+
+img,
+picture,
+video,
+iframe,
+figure {
+    max-width: 100%;
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center center;
+}
+
+a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    font-size: inherit;
+}
+
+p a {
+    display: inline;
+}
+
+li {
+    list-style-type: none;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+a,
+strong,
+blockquote,
+i,
+b,
+u,
+em {
+    font-size: 1em;
+    font-weight: inherit;
+    font-style: inherit;
+    text-decoration: none;
+    color: inherit;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+::selection {
+    background-color: var(--negro);
+    color: var(--blanco);
+}
+
+form,
+input,
+textarea,
+select,
+button,
+label {
+    font-family: inherit;
+    font-size: inherit;
+    hyphens: auto;
+    background-color: transparent;
+    color: inherit;
+    display: block;
+    appearance: none;
+}
+
+table,
+tr,
+td {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+svg {
+    width: 100%;
+    display: block;
+    fill: currentColor;
+}
+
+body {
+    min-height: 100vh;
+    font-size: 100%;
+    font-family: var(--tipo-principal);
+    color: var(--negro);
+    line-height: 1.4em;
+    hyphens: auto;
+    font-smooth: always;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+/* ------------ Modal styles ----------- */
+
 .carritoModal--hidden {
     display: none;
     pointer-events: none; 
@@ -77,4 +199,134 @@
 .black-shade--hidden {
     display: none;
     pointer-events: none;
+}
+
+/* ------------ ./Modal styles ----------- */
+
+
+/* ------------ ./Product Item styles ----------- */
+
+.productsView {
+    margin: 2em;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center; 
+}
+
+.cart {
+    background-color: #1C6758;
+    color: #EEF2E6;
+    border-radius: 25%;
+    padding: .5em;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: center;
+    gap: 5px;
+}
+
+.cart__cantidad {
+    padding: 0;
+    margin: 0;
+}
+
+.productItem {
+    background: #1c1c1c;
+    width: 12em;
+    height: 20em;
+    border-radius: 5%;
+    margin: 1.5em;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.productItem__info {
+    width: 100%;
+    text-align: center;
+    font-weight: 400;
+    font-size: 1em;
+    color: #EEF2E6;
+}
+
+.productItem__button {
+    background-color: #1C6758;
+    width: 100%;
+    height: 15%;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 5px;
+    align-self: flex-end;
+    margin: .5em;
+    font-weight: 600;
+    font-size: 1.1em;
+}
+
+/* ------------ ./Product Item styles ----------- */
+
+
+.navbar {
+    width: 100%;
+    min-height: 10vh;
+    padding: 1em 3em;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar__brand {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar__nav {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.navbar__item {
+    margin: 0 1em;
+    font-weight: 300;
+    font-size: 1.2em;
+    color: #EEF2E6;
+}
+
+.navbar__cart {
+    background-color: #1C6758;
+    border-radius: 25%;
+    padding: .5em;
+    color: #EEF2E6;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: center;
+    gap: 5px;
+}
+
+.logo {
+    font-size: 1em;
+    font-weight: 900;
+}
+
+.logo--circle {
+    background-color: #EEF2E6;
+    border-radius: 60px;
+    padding: .4em .3em;
+}
+
+.logo--normal {
+    color: #EEF2E6;
+    letter-spacing: .05em;
+    padding-left: .3em;
+}
+
+.blak-background {
+    background-color: #181818;
 }

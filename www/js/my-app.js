@@ -268,45 +268,44 @@ async function createProductCards() {
   const fragment = document.createDocumentFragment();
   productsStore.forEach(product => {
     const productCardContainer = document.createElement("div");
-    productCardContainer.setAttribute("class", "col-md-4 my-5");
+    productCardContainer.setAttribute("class", "productItem");
 
     const appendChildsFromProductCard = (child) => productCardContainer.appendChild(child);
 
     const productImage = document.createElement("img");
     productImage.setAttribute("src", product.image);
-    productImage.width = 100;
+    productImage.width = 50;
 
     const addToCartButton = document.createElement("button");
     addToCartButton.textContent = "Agregar al carrito";
-    addToCartButton.setAttribute("class", "bg-primary");
-    addToCartButton.setAttribute("class", "addToCartButton");
+    addToCartButton.setAttribute("class", "productItem__button");
 
 
-    const viewProductButton = document.createElement("button");
-    viewProductButton.textContent = "Ver detalle";
-    viewProductButton.setAttribute("class", "bg-success");
+    // const viewProductButton = document.createElement("button");
+    // viewProductButton.textContent = "Ver detalle";
+    // viewProductButton.setAttribute("class", "productItem__button");
 
 
     const productName = document.createElement("p");
     productName.textContent = product.name;
+    productName.setAttribute("class", "productItem__info");
 
     const productPrice = document.createElement("p");
     productPrice.textContent = "$" + product.price;
-    productPrice.style.color = "red";
+    productPrice.setAttribute("class", "productItem__info");
 
     appendChildsFromProductCard(productImage);
     appendChildsFromProductCard(productName);
     appendChildsFromProductCard(productPrice);
     appendChildsFromProductCard(addToCartButton);
-    appendChildsFromProductCard(viewProductButton);
+    // appendChildsFromProductCard(viewProductButton);
     fragment.appendChild(productCardContainer);
 
     
   })
 
 
-
-  $$(".product-list").append(fragment);
+  $$(".productsView").append(fragment);
   configCartEvents()
 }
 
@@ -319,15 +318,18 @@ cart = []
  * al carrito
  */
 function configCartEvents() {
-  const cartButtoms = document.querySelectorAll('.addToCartButton');
-  const cartNumber = document.querySelector('#cart')
-  const closeModal = document.querySelector('#carritoModal-close')
-  const removeCartButton = document.querySelector('#carritoModal-deleteCart')
+  const cartButtoms = $$('.productItem__button');
+  const cartNumber = $$('#cart')
+  const closeModal = $$('#carritoModal-close')
+  const removeCartButton = $$('#carritoModal-deleteCart')
 
+  console.log(cartButtoms)
 
-  removeCartButton.addEventListener('click', removeAllItemsFromCart)  
-  cartNumber.addEventListener('click', () => {openAndCloseModalCart("open")})
-  closeModal.addEventListener('click', () => openAndCloseModalCart("close"))
+  removeCartButton.on('click', removeAllItemsFromCart)
+
+  cartNumber.on('click', () => {openAndCloseModalCart("open")})
+  closeModal.on('click', () => openAndCloseModalCart("close"))
+
   cartButtoms.forEach((botones, index) => {
     botones.addEventListener('click', () => addProducInCart(index))
   })
@@ -344,14 +346,18 @@ function configCartEvents() {
  */
 function addProducInCart(indexButtom) {
   let itemsInCart = (cart.length + 1)
-  const cartNumber = document.querySelector('#cart')
+
+  console.log(itemsInCart)
+  const cartNumber = $$('#cart-cantidad')
+
 
   const isValidItem = productsStore.find((_, productIndex) => productIndex === indexButtom)
 
   if (isValidItem) {
     cart.push(isValidItem)
     renderProductInCart(isValidItem)
-    cartNumber.textContent = `carrito (${itemsInCart})` 
+    cartNumber.text(itemsInCart)
+
 }
 
 }
@@ -365,15 +371,33 @@ function addProducInCart(indexButtom) {
  */
 function renderProductInCart(item) {
 
-  const itemContainer = document.querySelector('#carritoModal-itemsContainer')
+  const fragment = document.createDocumentFragment();
+  const appendChildsFromProductCard = (child) => itemCardContainer.appendChild(child);
 
-  itemContainer.innerHTML += `
-  <div class="item">
-  <img class="item-img" src="${item.image}" alt="">
-  <div class="item-name">${item.name}</div>
-  <div class="item-price">$ ${item.price}</div>
-  </div>
-  `
+  const itemCardContainer = document.createElement("div");
+  itemCardContainer.setAttribute("class", "item");
+
+
+  const productImage = document.createElement("img");
+  productImage.setAttribute("src", item.image);
+  productImage.setAttribute("class", "item-img");
+
+  const productName = document.createElement("div");
+  productName.setAttribute("class", "item-name");
+  productName.textContent = item.name;
+
+  const productPrice = document.createElement("div");
+  productPrice.setAttribute("class", "item-price");
+  productPrice.textContent = item.price;
+
+
+  appendChildsFromProductCard(productImage)
+  appendChildsFromProductCard(productPrice)
+  appendChildsFromProductCard(productName)
+  fragment.appendChild(itemCardContainer);
+
+
+  $$('#carritoModal-itemsContainer').append(fragment)
 }
 
 
@@ -382,16 +406,15 @@ function renderProductInCart(item) {
  * eliminar todos los objetos del carrito
  */
 function removeAllItemsFromCart() {
-  const itemContainer = document.querySelector('#carritoModal-itemsContainer')
-  const cartCant  = document.querySelector('#cart')
+  const itemContainer = $$('#carritoModal-itemsContainer')
+  const cartNumber = $$('#cart-cantidad')
 
   if(cart.length < 1) {
     console.log("no puede borrar")
   } else {
       cart.length = 0
-      localStorage.clear()
-      itemContainer.innerHTML = ``
-      cartCant.textContent = `carrito (0)`
+      itemContainer.html('')
+      cartNumber.text(0)
       openAndCloseModalCart("close")
   }
 
@@ -408,35 +431,28 @@ function removeAllItemsFromCart() {
  */
 function openAndCloseModalCart(action) {
 
-  const carritoModal         = document.querySelector('#carritoModal')
-  const shadeBlackBackground = document.querySelector('#shadeBackground')
+  const carritoModal         = $$('#carritoModal')
+  const shadeBlackBackground = $$('#shadeBackground')
 
   if (action === "open") {
-      carritoModal.classList.add('carritoModal')
-      carritoModal.classList.remove('carritoModal--hidden')
+      carritoModal.addClass('carritoModal')
+      carritoModal.removeClass('carritoModal--hidden')
 
-      shadeBlackBackground.classList.add('black-shade')
-      shadeBlackBackground.classList.remove('black-shade--hidden')
+      shadeBlackBackground.addClass('black-shade')
+      shadeBlackBackground.removeClass('black-shade--hidden')
 
       console.log("opened")
 
   }
 
   if (action === 'close') {
-      carritoModal.classList.remove('carritoModal')
-      carritoModal.classList.add('carritoModal--hidden')
+      carritoModal.removeClass('carritoModal')
+      carritoModal.addClass('carritoModal--hidden')
 
-      shadeBlackBackground.classList.remove('black-shade')
-      shadeBlackBackground.classList.add('black-shade--hidden')
+      shadeBlackBackground.removeClass('black-shade')
+      shadeBlackBackground.addClass('black-shade--hidden')
   }
-
-
-
 }
-
-
-
-// ------------------ ./Ventana modal (carrito de compras) ------------------
 
 
 
