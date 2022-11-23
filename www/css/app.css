@@ -12,6 +12,7 @@
        url('../fonts/poppins-v13-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
        url('../fonts/poppins-v13-latin-regular.svg#Poppins') format('svg'); /* Legacy iOS */
 }
+
 /* poppins-italic - latin */
 @font-face {
   font-family: 'Poppins';

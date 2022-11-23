@@ -2,7 +2,26 @@
   <div class="page page-current">
       <div class="page-content">
           <div class="page-title">Tienda</div>
-          <div class="cart text-primary">Carrito (0)</div>
+
+        <!-- Modal carrito -->
+        <div id="carritoModal" class="carritoModal carritoModal--hidden">
+          <div class="carritoModal-nav">
+              <h3 class="carritoModal-nav-title">Bievenido al carrito de Hardstock</h3>
+              <i id = "carritoModal-close" class="bi bi-x-lg"></i>
+          </div>
+          <div id="carritoModal-itemsContainer" class="carritoModal-itemsContainer">
+          </div>
+          <div class="carritoModal-footer">
+              <button class="carritoModal-buttom" id="carritoModal-checkout">Finalizar Compra</button>
+              <button class="carritoModal-buttom" id="carritoModal-deleteCart">Eliminar carrito</button>
+              <p id="carritoModal-finalPrice"></p>
+          </div>
+      </div>
+      <!-- Shade Background -->
+      <div id = 'shadeBackground' class="black-shade--hidden"></div>
+
+
+          <div id = "cart" class="cart text-primary">Carrito (0)</div>
           <div><a class="button convert-form-to-data back-button" href="/cuenta/" >Mi cuenta</a></div>
           <div class="container">
             <div class="row product-list">

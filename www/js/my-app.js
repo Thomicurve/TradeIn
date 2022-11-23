@@ -256,6 +256,7 @@ async function getProducts() {
 }
 
 
+
 /**
  * Crea las cartas de productos que se van a visualizar en la ux
  */
@@ -278,6 +279,7 @@ async function createProductCards() {
     const addToCartButton = document.createElement("button");
     addToCartButton.textContent = "Agregar al carrito";
     addToCartButton.setAttribute("class", "bg-primary");
+    addToCartButton.setAttribute("class", "addToCartButton");
 
 
     const viewProductButton = document.createElement("button");
@@ -292,18 +294,151 @@ async function createProductCards() {
     productPrice.textContent = "$" + product.price;
     productPrice.style.color = "red";
 
-
     appendChildsFromProductCard(productImage);
     appendChildsFromProductCard(productName);
     appendChildsFromProductCard(productPrice);
     appendChildsFromProductCard(addToCartButton);
     appendChildsFromProductCard(viewProductButton);
     fragment.appendChild(productCardContainer);
+
+    
   })
 
 
+
   $$(".product-list").append(fragment);
+  configCartEvents()
 }
+
+
+cart = []
+
+/**
+ * Tomamos los botones generados en los produtos
+ * y les agregamos el evento para cuando los agreguemos
+ * al carrito
+ */
+function configCartEvents() {
+  const cartButtoms = document.querySelectorAll('.addToCartButton');
+  const cartNumber = document.querySelector('#cart')
+  const closeModal = document.querySelector('#carritoModal-close')
+  const removeCartButton = document.querySelector('#carritoModal-deleteCart')
+
+
+  removeCartButton.addEventListener('click', removeAllItemsFromCart)  
+  cartNumber.addEventListener('click', () => {openAndCloseModalCart("open")})
+  closeModal.addEventListener('click', () => openAndCloseModalCart("close"))
+  cartButtoms.forEach((botones, index) => {
+    botones.addEventListener('click', () => addProducInCart(index))
+  })
+}
+
+/**
+ * 
+ * @param {Product} indexButtom 
+ * 
+ * Agrega los elementos agregados
+ * por el usuario al carrito al array
+ * cart, aumentamos el numero de productos
+ * en el carrito
+ */
+function addProducInCart(indexButtom) {
+  let itemsInCart = (cart.length + 1)
+  const cartNumber = document.querySelector('#cart')
+
+  const isValidItem = productsStore.find((_, productIndex) => productIndex === indexButtom)
+
+  if (isValidItem) {
+    cart.push(isValidItem)
+    renderProductInCart(isValidItem)
+    cartNumber.textContent = `carrito (${itemsInCart})` 
+}
+
+}
+
+/**
+ * 
+ * Renderiza los items que
+ * el usuario agrega en el carrito
+ * 
+ * @param {Porduct} item 
+ */
+function renderProductInCart(item) {
+
+  const itemContainer = document.querySelector('#carritoModal-itemsContainer')
+
+  itemContainer.innerHTML += `
+  <div class="item">
+  <img class="item-img" src="${item.image}" alt="">
+  <div class="item-name">${item.name}</div>
+  <div class="item-price">$ ${item.price}</div>
+  </div>
+  `
+}
+
+
+/**
+ * Funcion para que el usuario pueda
+ * eliminar todos los objetos del carrito
+ */
+function removeAllItemsFromCart() {
+  const itemContainer = document.querySelector('#carritoModal-itemsContainer')
+  const cartCant  = document.querySelector('#cart')
+
+  if(cart.length < 1) {
+    console.log("no puede borrar")
+  } else {
+      cart.length = 0
+      localStorage.clear()
+      itemContainer.innerHTML = ``
+      cartCant.textContent = `carrito (0)`
+      openAndCloseModalCart("close")
+  }
+
+
+}
+
+
+/**
+ * 
+ * @param {Modal Action} action 
+ * 
+ * Cerrrar o abrir la ventana modal
+ * en la que se va a encontrar el carrito de compras
+ */
+function openAndCloseModalCart(action) {
+
+  const carritoModal         = document.querySelector('#carritoModal')
+  const shadeBlackBackground = document.querySelector('#shadeBackground')
+
+  if (action === "open") {
+      carritoModal.classList.add('carritoModal')
+      carritoModal.classList.remove('carritoModal--hidden')
+
+      shadeBlackBackground.classList.add('black-shade')
+      shadeBlackBackground.classList.remove('black-shade--hidden')
+
+      console.log("opened")
+
+  }
+
+  if (action === 'close') {
+      carritoModal.classList.remove('carritoModal')
+      carritoModal.classList.add('carritoModal--hidden')
+
+      shadeBlackBackground.classList.remove('black-shade')
+      shadeBlackBackground.classList.add('black-shade--hidden')
+  }
+
+
+
+}
+
+
+
+// ------------------ ./Ventana modal (carrito de compras) ------------------
+
+
 
 $$(document).on("page:init", '.page[data-name="tienda"]', function (e) {
 
