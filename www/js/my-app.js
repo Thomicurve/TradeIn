@@ -384,10 +384,11 @@ function addProducInCart(indexButtom) {
 
 }
 
-function deleteItemFromCart(item) {
+function deleteItemFromCart() {
+
   let isTheLastProduct = false;
   cart.forEach(product => {
-    if (product.name === item) {
+    if (product.name === this.id) {
       if (product.cartCount > 1) product.cartCount--;
       else isTheLastProduct = true;
       totalCartPrice -= parseInt(product.price);
@@ -396,14 +397,14 @@ function deleteItemFromCart(item) {
 
   if (isTheLastProduct) {
     const newCart = cart.filter(product => {
-      return product.name != item
+      return product.name != this.id
     });
     cart = newCart;
   }
 
   cartItems--;
   $$('#cart-cantidad').text(cartItems)
-  renderProductInCart(item);
+  renderProductInCart(this.id);
 }
 
 /**
@@ -414,13 +415,9 @@ function deleteItemFromCart(item) {
  * @param {Porduct} item 
  */
 function renderProductInCart() {
-  console.log('atroden')
   const itemsContainer = document.getElementById("carritoModal-itemsContainer");
-  console.log(itemsContainer.children.length);
   document.querySelectorAll(".item").forEach(item => item.remove());
 
-  // if (itemsContainer.children.length != 0) {
-  // }
   cart.forEach(item => {
 
     const fragment = document.createDocumentFragment();
@@ -449,6 +446,7 @@ function renderProductInCart() {
     const deleteProductButton = document.createElement("button");
     deleteProductButton.setAttribute("class", "delete-item-button btn btn-danger");
     deleteProductButton.id = item.name;
+    deleteProductButton.onclick = deleteItemFromCart;
     deleteProductButton.textContent = `X`;
 
     appendChildsFromProductCard(productImage)
@@ -498,9 +496,6 @@ function openAndCloseModalCart(action) {
 
   itemContainer.html('')
   renderProductInCart()
-  $$(".delete-item-button").on("click", (e) => {
-    deleteItemFromCart(e.target.id);
-  })
   const carritoModal = $$('#carritoModal')
   const shadeBlackBackground = $$('#shadeBackground')
 
