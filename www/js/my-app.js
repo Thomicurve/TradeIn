@@ -348,7 +348,6 @@ let cartItems = 0;
 function addProducInCart(indexButtom) {
   const cartNumber = $$('#cart-cantidad')
 
-
   const isValidItem = productsStore.find((_, productIndex) => productIndex === indexButtom)
   const productsInCart = cart.find(product => product.name === isValidItem.name);
 
