@@ -19,14 +19,14 @@
           </div>
           <hr>
           <form id="credit-card-form">
-            <input class="credit-card-inputs" required placeholder="Titular de la tarjeta" id="card-name"/>
-            <input class="credit-card-inputs" required placeholder="Numero de tarjeta" id="card-number"/>
+            <input class="credit-card-inputs" required name="card_name" placeholder="Titular de la tarjeta"/>
+            <input class="credit-card-inputs" required name="card_number" placeholder="Numero de tarjeta"/>
             <div class="exp-date-container">
-              <label class="exp-date-title" for="exp-month">Fecha de expiracion</label>
-              <input class="credit-card-inputs" name="exp-month" required placeholder="Mes" id="exp-month"/>
-              <input class="credit-card-inputs" required placeholder="Año" id="exp-year"/>
+              <label class="exp-date-title" for="exp_month">Fecha de expiracion</label>
+              <input class="credit-card-inputs" name="exp_month" required placeholder="Mes"/>
+              <input class="credit-card-inputs" required name="exp_year" placeholder="Año"/>
             </div>
-            <input class="credit-card-inputs" required placeholder="Codigo de seguridad" id="card-code"/>
+            <input class="credit-card-inputs" required name="card_code" placeholder="Codigo de seguridad"/>
             <button type="submit" class="btn-success btn">Pagar</button>
           </form>
           <button class="btn-danger btn" id="cancel-buy">Cancelar compra</button>

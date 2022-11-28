@@ -545,12 +545,34 @@ async function getAccountInfo() {
   const db = firebase.firestore();
 
   let usersCollection = db.collection("users").where("id", "==", userID);
-  const querySnapshot = await usersCollection.get();
-  querySnapshot.forEach(doc => {
+  const queryUsersSnapshot = await usersCollection.get();
+  queryUsersSnapshot.forEach(doc => {
     userData = doc.data();
   })
 
   return userData;
+}
+
+async function getPurchaseHistoryDetails() {
+  console.log(this)
+}
+
+/**
+ * obtiene el historial de compras del usuario desde la firestore, filtrando por el usuario logueado y lo devuelve
+ * @returns El historial de compras del usuario
+ */
+async function getPurchasesHistory() {
+  let userPurchases = [];
+  const userID = localStorage.getItem(userSessionItemKey);
+  const db = firebase.firestore();
+
+  let buysHistoryCollection = db.collection("buysHistory").where("userID", "==", userID);
+  const queryBuysSnapshot = await buysHistoryCollection.get();
+  queryBuysSnapshot.forEach(doc => {
+    userPurchases.push(doc.data());
+  })
+
+  return userPurchases;
 }
 
 /**
@@ -561,6 +583,34 @@ async function showAccountInfo() {
   $$(".account-info").append(`
   <div><h5 class="text-primary">Nombre: ${userData.fullname}</h5></div>
   <div><p class="text-info">Correo electronico: ${userData.email}</p></div>`)
+
+  const userPurchases = await getPurchasesHistory();
+  userPurchases.forEach(purchase => {
+    const productItem = document.createElement("div");
+    productItem.className = "productItem";
+
+    const productDate = document.createElement("h5");
+    productDate.textContent = new Date(purchase.buyDate.nanoseconds);
+
+    const productImage = document.createElement("img");
+    productImage.src = purchase.productsBought[0].image;
+    productImage.width = 200;
+
+    const totalPrice = document.createElement("p");
+    totalPrice.textContent = `Total pagado: $${formatPrice.format(purchase.totalPrice)}`
+
+    const seeMoreButton = document.createElement("button");
+    seeMoreButton.className = "btn btn-warning";
+    seeMoreButton.textContent = "Ver mas";
+    seeMoreButton.onclick = getPurchaseHistoryDetails;
+
+    productItem.appendChild(productDate);
+    productItem.appendChild(productImage);
+    productItem.appendChild(totalPrice);
+    productItem.append(seeMoreButton);
+
+    $$(".account-info").append(productItem)
+  })
 }
 
 $$(document).on("page:init", '.page[data-name="cuenta"]', function (e) {
@@ -601,11 +651,43 @@ function showBuyResume() {
   })
 }
 
+async function payProducts() {
+  const db = firebase.firestore();
+  let buysHistoryCollection = db.collection("buysHistory");
+  const userID = localStorage.getItem(userSessionItemKey);
+
+  await buysHistoryCollection.doc().set({
+    userID,
+    totalPrice: totalCartPrice,
+    productsBought: cart,
+    buyDate: new Date()
+  });
+
+  Swal.fire({
+    title: 'Compra',
+    text: 'Compra exitosa!',
+    icon: 'success',
+    timer: 2000,
+    showConfirmButton: false,
+    timerProgressBar: true,
+  })
+
+  cart = [];
+  totalCartPrice = 0;
+  cartItems = 0;
+  mainView.router.navigate({ name: "tienda" });
+}
 
 $$(document).on("page:init", '.page[data-name="checkout"]', function (e) {
   showBuyResume();
 
   $$("#total-price").text(`Total: $${formatPrice.format(totalCartPrice)}`);
+
+  $$("#credit-card-form").on("submit", (e) => {
+    e.preventDefault();
+    const { card_code, card_name, card_number, exp_month, exp_year } = e.target.elements
+    payProducts();
+  })
 
   $$("#cancel-buy").on("click", () => {
     mainView.router.navigate({ name: "tienda" });
