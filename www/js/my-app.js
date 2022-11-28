@@ -301,7 +301,7 @@ async function createProductCards() {
     // appendChildsFromProductCard(viewProductButton);
     fragment.appendChild(productCardContainer);
 
-    
+
   })
 
 
@@ -327,7 +327,7 @@ function configCartEvents() {
 
   removeCartButton.on('click', removeAllItemsFromCart)
 
-  cartNumber.on('click', () => {openAndCloseModalCart("open")})
+  cartNumber.on('click', () => { openAndCloseModalCart("open") })
   closeModal.on('click', () => openAndCloseModalCart("close"))
 
   cartButtoms.forEach((botones, index) => {
@@ -335,6 +335,7 @@ function configCartEvents() {
   })
 }
 
+let cartItems = 0;
 /**
  * 
  * @param {Product} indexButtom 
@@ -345,20 +346,30 @@ function configCartEvents() {
  * en el carrito
  */
 function addProducInCart(indexButtom) {
-  let itemsInCart = (cart.length + 1)
-
-  console.log(itemsInCart)
   const cartNumber = $$('#cart-cantidad')
 
 
   const isValidItem = productsStore.find((_, productIndex) => productIndex === indexButtom)
+  const productsInCart = cart.find(product => product.name === isValidItem.name);
 
   if (isValidItem) {
-    cart.push(isValidItem)
-    renderProductInCart(isValidItem)
-    cartNumber.text(itemsInCart)
+    const { price, image, description, name, stock } = isValidItem;
+    if (!productsInCart) {
+      cart.push({
+        price,
+        image,
+        description,
+        name,
+        stock,
+        cartCount: 1
+      })
+    } else {
+      cart.forEach(item => item.name == productsInCart.name && item.cartCount++)
+    }
+    cartItems++;
+    cartNumber.text(cartItems)
 
-}
+  }
 
 }
 
@@ -390,10 +401,15 @@ function renderProductInCart(item) {
   productPrice.setAttribute("class", "item-price");
   productPrice.textContent = item.price;
 
+  const productAmount = document.createElement("div");
+  productAmount.setAttribute("class", "item-price");
+  productAmount.textContent = `x${item.cartCount}`;
+
 
   appendChildsFromProductCard(productImage)
   appendChildsFromProductCard(productPrice)
   appendChildsFromProductCard(productName)
+  appendChildsFromProductCard(productAmount);
   fragment.appendChild(itemCardContainer);
 
 
@@ -409,13 +425,13 @@ function removeAllItemsFromCart() {
   const itemContainer = $$('#carritoModal-itemsContainer')
   const cartNumber = $$('#cart-cantidad')
 
-  if(cart.length < 1) {
+  if (cart.length < 1) {
     console.log("no puede borrar")
   } else {
-      cart.length = 0
-      itemContainer.html('')
-      cartNumber.text(0)
-      openAndCloseModalCart("close")
+    cart.length = 0
+    itemContainer.html('')
+    cartNumber.text(0)
+    openAndCloseModalCart("close")
   }
 
 
@@ -430,27 +446,28 @@ function removeAllItemsFromCart() {
  * en la que se va a encontrar el carrito de compras
  */
 function openAndCloseModalCart(action) {
-
-  const carritoModal         = $$('#carritoModal')
+  cart.forEach(item => renderProductInCart(item))
+  console.log(cart);
+  const carritoModal = $$('#carritoModal')
   const shadeBlackBackground = $$('#shadeBackground')
 
   if (action === "open") {
-      carritoModal.addClass('carritoModal')
-      carritoModal.removeClass('carritoModal--hidden')
+    carritoModal.addClass('carritoModal')
+    carritoModal.removeClass('carritoModal--hidden')
 
-      shadeBlackBackground.addClass('black-shade')
-      shadeBlackBackground.removeClass('black-shade--hidden')
+    shadeBlackBackground.addClass('black-shade')
+    shadeBlackBackground.removeClass('black-shade--hidden')
 
-      console.log("opened")
+    console.log("opened")
 
   }
 
   if (action === 'close') {
-      carritoModal.removeClass('carritoModal')
-      carritoModal.addClass('carritoModal--hidden')
+    carritoModal.removeClass('carritoModal')
+    carritoModal.addClass('carritoModal--hidden')
 
-      shadeBlackBackground.removeClass('black-shade')
-      shadeBlackBackground.addClass('black-shade--hidden')
+    shadeBlackBackground.removeClass('black-shade')
+    shadeBlackBackground.addClass('black-shade--hidden')
   }
 }
 

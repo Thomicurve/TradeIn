@@ -128,8 +128,8 @@ body {
 .carritoModal {
     position: fixed;
     background-color: #1c1c1c;
-    width: 38em;
-    height: 45em;
+    width: 30em;
+    height: 50em;
     border-radius: 10px;
     color: #EEF2E6;
     left: 50%;
@@ -143,6 +143,7 @@ body {
     padding: .5em;
     margin: .8em;
     border-radius: 10px;
+    margin: .8em;
     color: #181818;
     cursor: pointer; 
 }
@@ -278,6 +279,10 @@ body {
     align-items: center;
 }
 
+.navbar a {
+    color: #EEF2E6;
+}
+
 .navbar__brand {
     display: flex;
     flex-flow: row wrap;
@@ -297,6 +302,13 @@ body {
     font-weight: 300;
     font-size: 1.2em;
     color: #EEF2E6;
+}
+
+.navbar__buttom {
+    background-color: #1C6758;
+    border-radius: 8%;
+    padding: .5em;
+
 }
 
 .navbar__cart {
