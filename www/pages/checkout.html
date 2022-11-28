@@ -1,0 +1,36 @@
+<div class="view view-init tab tab-active page" id="checkout" data-name="checkout" data-url="/checkout/">
+  <div class="page page-current">
+      <div class="page-content blak-background">
+        <!-- navbar -->
+        <nav class="navbar">
+          <div class="navbar__brand">
+            <span class="logo logo--circle">HS</span>
+            <span class="logo logo--normal">HardStock
+          </div>
+        </nav>
+
+        <div>
+          <h3>Finalizar compra</h3>
+          <div class="buy-resume-container">
+            <h4>Resumen de tu compra</h4>
+            <div id="buy-items-list">
+            </div>
+            <h6 id="total-price">Total: $0</h6>
+          </div>
+          <hr>
+          <form id="credit-card-form">
+            <input class="credit-card-inputs" required name="card_name" placeholder="Titular de la tarjeta"/>
+            <input class="credit-card-inputs" required name="card_number" placeholder="Numero de tarjeta"/>
+            <div class="exp-date-container">
+              <label class="exp-date-title" for="exp_month">Fecha de expiracion</label>
+              <input class="credit-card-inputs" name="exp_month" required placeholder="Mes"/>
+              <input class="credit-card-inputs" required name="exp_year" placeholder="Año"/>
+            </div>
+            <input class="credit-card-inputs" required name="card_code" placeholder="Codigo de seguridad"/>
+            <button type="submit" class="btn-success btn">Pagar</button>
+          </form>
+          <button class="btn-danger btn" id="cancel-buy">Cancelar compra</button>
+        </div>
+      </div>
+  </div>
+</div>

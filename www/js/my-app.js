@@ -24,6 +24,11 @@ var app = new Framework7({
       url: "./pages/store.html",
     },
     {
+      path: "/checkout/",
+      name: "checkout",
+      url: "./pages/checkout.html",
+    },
+    {
       path: "/registro/",
       name: "registro",
       url: "./pages/register.html",
@@ -33,6 +38,7 @@ var app = new Framework7({
       url: "./index.html",
       name: "inicio",
     },
+
   ],
 });
 
@@ -85,6 +91,10 @@ function ShowErrorAlert(message) {
     timerProgressBar: true,
   })
 }
+
+let formatPrice = new Intl.NumberFormat("es-ES", {
+  currency: "USD"
+});
 
 
 // * AUTENTICACION
@@ -170,6 +180,8 @@ function LogOut() {
       timerProgressBar: true,
     })
     localStorage.setItem(userSessionItemKey, null);
+    cartItems = 0;
+    cart = [];
     verifyUserSession();
   }).catch((error) => {
     Swal.fire({
@@ -291,7 +303,7 @@ async function createProductCards() {
     productName.setAttribute("class", "productItem__info");
 
     const productPrice = document.createElement("p");
-    productPrice.textContent = "$" + product.price;
+    productPrice.textContent = `$${formatPrice.format(product.price)}`;
     productPrice.setAttribute("class", "productItem__info");
 
     appendChildsFromProductCard(productImage);
@@ -310,7 +322,7 @@ async function createProductCards() {
 }
 
 
-cart = []
+let cart = []
 
 /**
  * Tomamos los botones generados en los produtos
@@ -323,8 +335,6 @@ function configCartEvents() {
   const closeModal = $$('#carritoModal-close')
   const removeCartButton = $$('#carritoModal-deleteCart')
 
-  console.log(cartButtoms)
-
   removeCartButton.on('click', removeAllItemsFromCart)
 
   cartNumber.on('click', () => { openAndCloseModalCart("open") })
@@ -336,6 +346,7 @@ function configCartEvents() {
 }
 
 let cartItems = 0;
+let totalCartPrice = 0;
 /**
  * 
  * @param {Product} indexButtom 
@@ -347,7 +358,6 @@ let cartItems = 0;
  */
 function addProducInCart(indexButtom) {
   const cartNumber = $$('#cart-cantidad')
-
 
   const isValidItem = productsStore.find((_, productIndex) => productIndex === indexButtom)
   const productsInCart = cart.find(product => product.name === isValidItem.name);
@@ -367,10 +377,34 @@ function addProducInCart(indexButtom) {
       cart.forEach(item => item.name == productsInCart.name && item.cartCount++)
     }
     cartItems++;
+    totalCartPrice += parseInt(price);
     cartNumber.text(cartItems)
 
   }
 
+}
+
+function deleteItemFromCart() {
+
+  let isTheLastProduct = false;
+  cart.forEach(product => {
+    if (product.name === this.id) {
+      if (product.cartCount > 1) product.cartCount--;
+      else isTheLastProduct = true;
+      totalCartPrice -= parseInt(product.price);
+    }
+  });
+
+  if (isTheLastProduct) {
+    const newCart = cart.filter(product => {
+      return product.name != this.id
+    });
+    cart = newCart;
+  }
+
+  cartItems--;
+  $$('#cart-cantidad').text(cartItems)
+  renderProductInCart(this.id);
 }
 
 /**
@@ -380,40 +414,50 @@ function addProducInCart(indexButtom) {
  * 
  * @param {Porduct} item 
  */
-function renderProductInCart(item) {
+function renderProductInCart() {
+  const itemsContainer = document.getElementById("carritoModal-itemsContainer");
+  document.querySelectorAll(".item").forEach(item => item.remove());
 
-  const fragment = document.createDocumentFragment();
-  const appendChildsFromProductCard = (child) => itemCardContainer.appendChild(child);
+  cart.forEach(item => {
 
-  const itemCardContainer = document.createElement("div");
-  itemCardContainer.setAttribute("class", "item");
+    const fragment = document.createDocumentFragment();
+    const appendChildsFromProductCard = (child) => itemCardContainer.appendChild(child);
 
-
-  const productImage = document.createElement("img");
-  productImage.setAttribute("src", item.image);
-  productImage.setAttribute("class", "item-img");
-
-  const productName = document.createElement("div");
-  productName.setAttribute("class", "item-name");
-  productName.textContent = item.name;
-
-  const productPrice = document.createElement("div");
-  productPrice.setAttribute("class", "item-price");
-  productPrice.textContent = item.price;
-
-  const productAmount = document.createElement("div");
-  productAmount.setAttribute("class", "item-price");
-  productAmount.textContent = `x${item.cartCount}`;
+    const itemCardContainer = document.createElement("div");
+    itemCardContainer.setAttribute("class", "item");
 
 
-  appendChildsFromProductCard(productImage)
-  appendChildsFromProductCard(productPrice)
-  appendChildsFromProductCard(productName)
-  appendChildsFromProductCard(productAmount);
-  fragment.appendChild(itemCardContainer);
+    const productImage = document.createElement("img");
+    productImage.setAttribute("src", item.image);
+    productImage.setAttribute("class", "item-img");
 
+    const productName = document.createElement("div");
+    productName.setAttribute("class", "item-name");
+    productName.textContent = item.name;
 
-  $$('#carritoModal-itemsContainer').append(fragment)
+    const productPrice = document.createElement("div");
+    productPrice.setAttribute("class", "item-price");
+    productPrice.textContent = `$${formatPrice.format(item.price)}`;
+
+    const productAmount = document.createElement("div");
+    productAmount.setAttribute("class", "item-amount");
+    productAmount.textContent = `x${item.cartCount}`;
+
+    const deleteProductButton = document.createElement("button");
+    deleteProductButton.setAttribute("class", "delete-item-button btn btn-danger");
+    deleteProductButton.id = item.name;
+    deleteProductButton.onclick = deleteItemFromCart;
+    deleteProductButton.textContent = `X`;
+
+    appendChildsFromProductCard(productImage)
+    appendChildsFromProductCard(productPrice)
+    appendChildsFromProductCard(productName)
+    appendChildsFromProductCard(productAmount);
+    appendChildsFromProductCard(deleteProductButton);
+    fragment.appendChild(itemCardContainer);
+    $$('#carritoTotal').text(`Total: $${formatPrice.format(totalCartPrice)}`);
+    itemsContainer.appendChild(fragment);
+  })
 }
 
 
@@ -430,7 +474,8 @@ function removeAllItemsFromCart() {
   } else {
     cart.length = 0
     itemContainer.html('')
-    cartNumber.text(0)
+    cartItems = 0;
+    cartNumber.text(cartItems);
     openAndCloseModalCart("close")
   }
 
@@ -446,8 +491,11 @@ function removeAllItemsFromCart() {
  * en la que se va a encontrar el carrito de compras
  */
 function openAndCloseModalCart(action) {
-  cart.forEach(item => renderProductInCart(item))
-  console.log(cart);
+  const itemContainer = $$('#carritoModal-itemsContainer')
+  // console.log(carritoContainer)
+
+  itemContainer.html('')
+  renderProductInCart()
   const carritoModal = $$('#carritoModal')
   const shadeBlackBackground = $$('#shadeBackground')
 
@@ -457,9 +505,6 @@ function openAndCloseModalCart(action) {
 
     shadeBlackBackground.addClass('black-shade')
     shadeBlackBackground.removeClass('black-shade--hidden')
-
-    console.log("opened")
-
   }
 
   if (action === 'close') {
@@ -474,8 +519,13 @@ function openAndCloseModalCart(action) {
 
 
 $$(document).on("page:init", '.page[data-name="tienda"]', function (e) {
-
+  $$('#cart-cantidad').text(cartItems)
   createProductCards();
+
+  $$("#carritoModal-checkout").on("click", (e) => {
+    mainView.router.navigate({ name: "checkout" });
+  });
+
   $$("#logout-button").on("click", (e) => {
     LogOut();
   });
@@ -495,12 +545,34 @@ async function getAccountInfo() {
   const db = firebase.firestore();
 
   let usersCollection = db.collection("users").where("id", "==", userID);
-  const querySnapshot = await usersCollection.get();
-  querySnapshot.forEach(doc => {
+  const queryUsersSnapshot = await usersCollection.get();
+  queryUsersSnapshot.forEach(doc => {
     userData = doc.data();
   })
 
   return userData;
+}
+
+async function getPurchaseHistoryDetails() {
+  console.log(this)
+}
+
+/**
+ * obtiene el historial de compras del usuario desde la firestore, filtrando por el usuario logueado y lo devuelve
+ * @returns El historial de compras del usuario
+ */
+async function getPurchasesHistory() {
+  let userPurchases = [];
+  const userID = localStorage.getItem(userSessionItemKey);
+  const db = firebase.firestore();
+
+  let buysHistoryCollection = db.collection("buysHistory").where("userID", "==", userID);
+  const queryBuysSnapshot = await buysHistoryCollection.get();
+  queryBuysSnapshot.forEach(doc => {
+    userPurchases.push(doc.data());
+  })
+
+  return userPurchases;
 }
 
 /**
@@ -511,9 +583,113 @@ async function showAccountInfo() {
   $$(".account-info").append(`
   <div><h5 class="text-primary">Nombre: ${userData.fullname}</h5></div>
   <div><p class="text-info">Correo electronico: ${userData.email}</p></div>`)
+
+  const userPurchases = await getPurchasesHistory();
+  userPurchases.forEach(purchase => {
+    const productItem = document.createElement("div");
+    productItem.className = "productItem";
+
+    const productDate = document.createElement("h5");
+    productDate.textContent = new Date(purchase.buyDate.nanoseconds);
+
+    const productImage = document.createElement("img");
+    productImage.src = purchase.productsBought[0].image;
+    productImage.width = 200;
+
+    const totalPrice = document.createElement("p");
+    totalPrice.textContent = `Total pagado: $${formatPrice.format(purchase.totalPrice)}`
+
+    const seeMoreButton = document.createElement("button");
+    seeMoreButton.className = "btn btn-warning";
+    seeMoreButton.textContent = "Ver mas";
+    seeMoreButton.onclick = getPurchaseHistoryDetails;
+
+    productItem.appendChild(productDate);
+    productItem.appendChild(productImage);
+    productItem.appendChild(totalPrice);
+    productItem.append(seeMoreButton);
+
+    $$(".account-info").append(productItem)
+  })
 }
 
 $$(document).on("page:init", '.page[data-name="cuenta"]', function (e) {
-
   showAccountInfo()
+});
+
+// ***************************************************************************************
+
+// * CHECKOUT
+function showBuyResume() {
+  const itemList = $$("#buy-items-list");
+  cart.forEach(item => {
+    const itemCardContainer = document.createElement("div");
+    itemCardContainer.setAttribute("class", "item");
+
+
+    const productImage = document.createElement("img");
+    productImage.setAttribute("src", item.image);
+    productImage.setAttribute("class", "item-img");
+
+    const productName = document.createElement("div");
+    productName.setAttribute("class", "item-name");
+    productName.textContent = item.name;
+
+    const productPrice = document.createElement("div");
+    productPrice.setAttribute("class", "item-price");
+    productPrice.textContent = `$${formatPrice.format(item.price)}`;
+
+    const productAmount = document.createElement("div");
+    productAmount.setAttribute("class", "item-price");
+    productAmount.textContent = `x${item.cartCount}`;
+
+    itemCardContainer.appendChild(productImage)
+    itemCardContainer.appendChild(productName)
+    itemCardContainer.appendChild(productPrice)
+    itemCardContainer.appendChild(productAmount)
+    itemList.append(itemCardContainer);
+  })
+}
+
+async function payProducts() {
+  const db = firebase.firestore();
+  let buysHistoryCollection = db.collection("buysHistory");
+  const userID = localStorage.getItem(userSessionItemKey);
+
+  await buysHistoryCollection.doc().set({
+    userID,
+    totalPrice: totalCartPrice,
+    productsBought: cart,
+    buyDate: new Date()
+  });
+
+  Swal.fire({
+    title: 'Compra',
+    text: 'Compra exitosa!',
+    icon: 'success',
+    timer: 2000,
+    showConfirmButton: false,
+    timerProgressBar: true,
+  })
+
+  cart = [];
+  totalCartPrice = 0;
+  cartItems = 0;
+  mainView.router.navigate({ name: "tienda" });
+}
+
+$$(document).on("page:init", '.page[data-name="checkout"]', function (e) {
+  showBuyResume();
+
+  $$("#total-price").text(`Total: $${formatPrice.format(totalCartPrice)}`);
+
+  $$("#credit-card-form").on("submit", (e) => {
+    e.preventDefault();
+    const { card_code, card_name, card_number, exp_month, exp_year } = e.target.elements
+    payProducts();
+  })
+
+  $$("#cancel-buy").on("click", () => {
+    mainView.router.navigate({ name: "tienda" });
+  })
 });
