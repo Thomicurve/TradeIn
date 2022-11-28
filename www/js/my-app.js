@@ -170,6 +170,8 @@ function LogOut() {
       timerProgressBar: true,
     })
     localStorage.setItem(userSessionItemKey, null);
+    cartItems = 0;
+    cart = [];
     verifyUserSession();
   }).catch((error) => {
     Swal.fire({
@@ -310,7 +312,7 @@ async function createProductCards() {
 }
 
 
-cart = []
+let cart = []
 
 /**
  * Tomamos los botones generados en los produtos
@@ -336,6 +338,7 @@ function configCartEvents() {
 }
 
 let cartItems = 0;
+let totalCartPrice = 0;
 /**
  * 
  * @param {Product} indexButtom 
@@ -366,6 +369,7 @@ function addProducInCart(indexButtom) {
       cart.forEach(item => item.name == productsInCart.name && item.cartCount++)
     }
     cartItems++;
+    totalCartPrice += parseInt(price);
     cartNumber.text(cartItems)
 
   }
@@ -398,7 +402,7 @@ function renderProductInCart(item) {
 
   const productPrice = document.createElement("div");
   productPrice.setAttribute("class", "item-price");
-  productPrice.textContent = item.price;
+  productPrice.textContent = `$${item.price}`;
 
   const productAmount = document.createElement("div");
   productAmount.setAttribute("class", "item-price");
@@ -411,7 +415,7 @@ function renderProductInCart(item) {
   appendChildsFromProductCard(productAmount);
   fragment.appendChild(itemCardContainer);
 
-
+  $$('#carritoTotal').text(`Total: $${totalCartPrice}`);
   $$('#carritoModal-itemsContainer').append(fragment)
 }
 
@@ -477,7 +481,7 @@ function openAndCloseModalCart(action) {
 
 
 $$(document).on("page:init", '.page[data-name="tienda"]', function (e) {
-
+  $$('#cart-cantidad').text(cartItems)
   createProductCards();
   $$("#logout-button").on("click", (e) => {
     LogOut();
