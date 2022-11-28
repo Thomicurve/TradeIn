@@ -446,6 +446,10 @@ function removeAllItemsFromCart() {
  * en la que se va a encontrar el carrito de compras
  */
 function openAndCloseModalCart(action) {
+  const itemContainer = $$('#carritoModal-itemsContainer')
+  // console.log(carritoContainer)
+
+  itemContainer.html('')
   cart.forEach(item => renderProductInCart(item))
   console.log(cart);
   const carritoModal = $$('#carritoModal')
