@@ -19,6 +19,7 @@
     "cordova-browser": "^6.0.0",
     "cordova-plugin-browsersync": "^1.1.0",
     "cordova-plugin-browsersync-gen2": "^1.1.7",
+    "cordova-plugin-livereload": "^1.2.2",
     "cordova-plugin-whitelist": "1",
     "cpy-cli": "^3.1.1",
     "cross-env": "^7.0.3",
