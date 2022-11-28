@@ -24,6 +24,11 @@ var app = new Framework7({
       url: "./pages/store.html",
     },
     {
+      path: "/checkout/",
+      name: "checkout",
+      url: "./pages/checkout.html",
+    },
+    {
       path: "/registro/",
       name: "registro",
       url: "./pages/register.html",
@@ -33,6 +38,7 @@ var app = new Framework7({
       url: "./index.html",
       name: "inicio",
     },
+
   ],
 });
 
@@ -85,6 +91,10 @@ function ShowErrorAlert(message) {
     timerProgressBar: true,
   })
 }
+
+let formatPrice = new Intl.NumberFormat("es-ES", {
+  currency: "USD"
+});
 
 
 // * AUTENTICACION
@@ -293,7 +303,7 @@ async function createProductCards() {
     productName.setAttribute("class", "productItem__info");
 
     const productPrice = document.createElement("p");
-    productPrice.textContent = "$" + product.price;
+    productPrice.textContent = `$${formatPrice.format(product.price)}`;
     productPrice.setAttribute("class", "productItem__info");
 
     appendChildsFromProductCard(productImage);
@@ -324,8 +334,6 @@ function configCartEvents() {
   const cartNumber = $$('#cart')
   const closeModal = $$('#carritoModal-close')
   const removeCartButton = $$('#carritoModal-deleteCart')
-
-  console.log(cartButtoms)
 
   removeCartButton.on('click', removeAllItemsFromCart)
 
@@ -376,6 +384,28 @@ function addProducInCart(indexButtom) {
 
 }
 
+function deleteItemFromCart(item) {
+  let isTheLastProduct = false;
+  cart.forEach(product => {
+    if (product.name === item) {
+      if (product.cartCount > 1) product.cartCount--;
+      else isTheLastProduct = true;
+      totalCartPrice -= parseInt(product.price);
+    }
+  });
+
+  if (isTheLastProduct) {
+    const newCart = cart.filter(product => {
+      return product.name != item
+    });
+    cart = newCart;
+  }
+
+  cartItems--;
+  $$('#cart-cantidad').text(cartItems)
+  renderProductInCart(item);
+}
+
 /**
  * 
  * Renderiza los items que
@@ -383,40 +413,53 @@ function addProducInCart(indexButtom) {
  * 
  * @param {Porduct} item 
  */
-function renderProductInCart(item) {
+function renderProductInCart() {
+  console.log('atroden')
+  const itemsContainer = document.getElementById("carritoModal-itemsContainer");
+  console.log(itemsContainer.children.length);
+  document.querySelectorAll(".item").forEach(item => item.remove());
 
-  const fragment = document.createDocumentFragment();
-  const appendChildsFromProductCard = (child) => itemCardContainer.appendChild(child);
+  // if (itemsContainer.children.length != 0) {
+  // }
+  cart.forEach(item => {
 
-  const itemCardContainer = document.createElement("div");
-  itemCardContainer.setAttribute("class", "item");
+    const fragment = document.createDocumentFragment();
+    const appendChildsFromProductCard = (child) => itemCardContainer.appendChild(child);
 
-
-  const productImage = document.createElement("img");
-  productImage.setAttribute("src", item.image);
-  productImage.setAttribute("class", "item-img");
-
-  const productName = document.createElement("div");
-  productName.setAttribute("class", "item-name");
-  productName.textContent = item.name;
-
-  const productPrice = document.createElement("div");
-  productPrice.setAttribute("class", "item-price");
-  productPrice.textContent = `$${item.price}`;
-
-  const productAmount = document.createElement("div");
-  productAmount.setAttribute("class", "item-price");
-  productAmount.textContent = `x${item.cartCount}`;
+    const itemCardContainer = document.createElement("div");
+    itemCardContainer.setAttribute("class", "item");
 
 
-  appendChildsFromProductCard(productImage)
-  appendChildsFromProductCard(productPrice)
-  appendChildsFromProductCard(productName)
-  appendChildsFromProductCard(productAmount);
-  fragment.appendChild(itemCardContainer);
+    const productImage = document.createElement("img");
+    productImage.setAttribute("src", item.image);
+    productImage.setAttribute("class", "item-img");
 
-  $$('#carritoTotal').text(`Total: $${totalCartPrice}`);
-  $$('#carritoModal-itemsContainer').append(fragment)
+    const productName = document.createElement("div");
+    productName.setAttribute("class", "item-name");
+    productName.textContent = item.name;
+
+    const productPrice = document.createElement("div");
+    productPrice.setAttribute("class", "item-price");
+    productPrice.textContent = `$${formatPrice.format(item.price)}`;
+
+    const productAmount = document.createElement("div");
+    productAmount.setAttribute("class", "item-amount");
+    productAmount.textContent = `x${item.cartCount}`;
+
+    const deleteProductButton = document.createElement("button");
+    deleteProductButton.setAttribute("class", "delete-item-button btn btn-danger");
+    deleteProductButton.id = item.name;
+    deleteProductButton.textContent = `X`;
+
+    appendChildsFromProductCard(productImage)
+    appendChildsFromProductCard(productPrice)
+    appendChildsFromProductCard(productName)
+    appendChildsFromProductCard(productAmount);
+    appendChildsFromProductCard(deleteProductButton);
+    fragment.appendChild(itemCardContainer);
+    $$('#carritoTotal').text(`Total: $${formatPrice.format(totalCartPrice)}`);
+    itemsContainer.appendChild(fragment);
+  })
 }
 
 
@@ -433,7 +476,8 @@ function removeAllItemsFromCart() {
   } else {
     cart.length = 0
     itemContainer.html('')
-    cartNumber.text(0)
+    cartItems = 0;
+    cartNumber.text(cartItems);
     openAndCloseModalCart("close")
   }
 
@@ -453,8 +497,10 @@ function openAndCloseModalCart(action) {
   // console.log(carritoContainer)
 
   itemContainer.html('')
-  cart.forEach(item => renderProductInCart(item))
-  console.log(cart);
+  renderProductInCart()
+  $$(".delete-item-button").on("click", (e) => {
+    deleteItemFromCart(e.target.id);
+  })
   const carritoModal = $$('#carritoModal')
   const shadeBlackBackground = $$('#shadeBackground')
 
@@ -464,9 +510,6 @@ function openAndCloseModalCart(action) {
 
     shadeBlackBackground.addClass('black-shade')
     shadeBlackBackground.removeClass('black-shade--hidden')
-
-    console.log("opened")
-
   }
 
   if (action === 'close') {
@@ -483,6 +526,11 @@ function openAndCloseModalCart(action) {
 $$(document).on("page:init", '.page[data-name="tienda"]', function (e) {
   $$('#cart-cantidad').text(cartItems)
   createProductCards();
+
+  $$("#carritoModal-checkout").on("click", (e) => {
+    mainView.router.navigate({ name: "checkout" });
+  });
+
   $$("#logout-button").on("click", (e) => {
     LogOut();
   });
@@ -521,6 +569,50 @@ async function showAccountInfo() {
 }
 
 $$(document).on("page:init", '.page[data-name="cuenta"]', function (e) {
-
   showAccountInfo()
+});
+
+// ***************************************************************************************
+
+// * CHECKOUT
+function showBuyResume() {
+  const itemList = $$("#buy-items-list");
+  cart.forEach(item => {
+    const itemCardContainer = document.createElement("div");
+    itemCardContainer.setAttribute("class", "item");
+
+
+    const productImage = document.createElement("img");
+    productImage.setAttribute("src", item.image);
+    productImage.setAttribute("class", "item-img");
+
+    const productName = document.createElement("div");
+    productName.setAttribute("class", "item-name");
+    productName.textContent = item.name;
+
+    const productPrice = document.createElement("div");
+    productPrice.setAttribute("class", "item-price");
+    productPrice.textContent = `$${formatPrice.format(item.price)}`;
+
+    const productAmount = document.createElement("div");
+    productAmount.setAttribute("class", "item-price");
+    productAmount.textContent = `x${item.cartCount}`;
+
+    itemCardContainer.appendChild(productImage)
+    itemCardContainer.appendChild(productName)
+    itemCardContainer.appendChild(productPrice)
+    itemCardContainer.appendChild(productAmount)
+    itemList.append(itemCardContainer);
+  })
+}
+
+
+$$(document).on("page:init", '.page[data-name="checkout"]', function (e) {
+  showBuyResume();
+
+  $$("#total-price").text(`Total: $${formatPrice.format(totalCartPrice)}`);
+
+  $$("#cancel-buy").on("click", () => {
+    mainView.router.navigate({ name: "tienda" });
+  })
 });

@@ -352,3 +352,25 @@ body {
 .blak-background {
     background-color: #181818;
 }
+
+
+/* ------------ ./Checkout styles ----------- */
+.credit-card-inputs {
+    background-color: #1c1c1c;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 10px 0px;
+    grid-row: 2 / 3;
+}
+
+.exp-date-container {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr, 1fr;
+    width: 300px;
+}
+
+.exp-date-title {
+    grid-column: 0 / 2;
+}
