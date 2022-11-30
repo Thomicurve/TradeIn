@@ -1,4 +1,3 @@
-const moment = require("moment");
 
 var $$ = Dom7;
 
@@ -594,7 +593,6 @@ async function showAccountInfo() {
     const productDate = document.createElement("h5");
     moment.locale('es');
     productDate.textContent = moment(purchase.buyDate.toDate()).fromNow();
-    // new Date(purchase.buyDate.nanoseconds);
     console.log(purchase.buyDate)
     const productImage = document.createElement("img");
     productImage.src = purchase.productsBought[0].image;
@@ -683,14 +681,27 @@ async function payProducts() {
 }
 
 $$(document).on("page:init", '.page[data-name="checkout"]', function (e) {
-  showBuyResume();
+   showBuyResume();
 
   $$("#total-price").text(`Total: $${formatPrice.format(totalCartPrice)}`);
 
   $$("#credit-card-form").on("submit", (e) => {
     e.preventDefault();
     const { card_code, card_name, card_number, exp_month, exp_year } = e.target.elements
-    payProducts();
+    const numsTarjeta = card_number.value  
+    const codigTarjeta = card_code.value
+    if(numsTarjeta.length==16 && codigTarjeta.length==3){
+      payProducts() 
+    }else{
+      Swal.fire({
+        title: 'Error',
+        text: 'Formulario incompleto',
+        icon: 'error',
+      })
+      mainView.router.navigate({ name: "tienda" });
+  }    
+  console.log(numsTarjeta.length)
+  console.log(codigTarjeta.length)
   })
 
   $$("#cancel-buy").on("click", () => {
