@@ -1,3 +1,5 @@
+const moment = require("moment");
+
 var $$ = Dom7;
 
 var app = new Framework7({
@@ -590,8 +592,10 @@ async function showAccountInfo() {
     productItem.className = "productItem";
 
     const productDate = document.createElement("h5");
-    productDate.textContent = new Date(purchase.buyDate.nanoseconds);
-
+    moment.locale('es');
+    productDate.textContent = moment(purchase.buyDate.toDate()).fromNow();
+    // new Date(purchase.buyDate.nanoseconds);
+    console.log(purchase.buyDate)
     const productImage = document.createElement("img");
     productImage.src = purchase.productsBought[0].image;
     productImage.width = 200;
